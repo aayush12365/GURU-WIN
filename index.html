@@ -1,0 +1,2172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>GURU WIN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&family=Roboto:wght@500;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* --- GLOBAL STYLES & NEW THEME --- */
+        :root {
+            --theme-red: #f85151; --theme-yellow: #ffc107; --theme-blue: #3d8bff;
+            --background-grey: #f1f2f6; --color-green: #4caf50; --color-red: #f44336;
+            --color-purple: #9c27b0; --dark-bg: #212121; --light-bg: #f1f2f6;
+            --text-dark: #333; --text-light: #fff;
+        }
+        html { height: 100%; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--light-bg); color: var(--text-dark); height: 100vh; max-height: 100vh; overflow: hidden; overscroll-behavior-y: contain; }
+
+        /* --- AUTHENTICATION PAGE STYLES --- */
+        #auth-wrapper { background: linear-gradient(160deg, #6D0000, #A30000, #D90429); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; position: relative; }
+        .auth-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--theme-red);
+            padding: 15px;
+            color: var(--text-light);
+            font-size: 20px;
+            z-index: 21;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .auth-header-icon {
+            padding-right: 10px;
+            cursor: pointer;
+        }
+        #auth-container { background: rgba(0, 0, 0, 0.5); padding: 25px 20px; border-radius: 15px; width: 100%; max-width: 360px; border: 1px solid var(--theme-yellow); box-shadow: 0 0 20px rgba(255, 193, 7, 0.5); animation: fadeIn 0.8s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        #auth-container h2 { text-align: center; margin-bottom: 20px; font-weight: 700; color: var(--theme-yellow); letter-spacing: 1px; }
+        #auth-container .form-group { margin-bottom: 15px; }
+        #auth-container input { width: 100%; padding: 12px; background: #222; border: 1px solid var(--theme-yellow); color: var(--theme-yellow); border-radius: 8px; font-size: 15px; transition: 0.2s; }
+        #auth-container input:focus { outline: none; background: #111; box-shadow: 0 0 8px var(--theme-yellow); }
+        #auth-container input::placeholder { color: #888; }
+        #auth-container .btn { background: linear-gradient(135deg, var(--theme-yellow), var(--theme-red)); color: var(--text-dark); padding: 12px; border: none; width: 100%; font-weight: bold; border-radius: 8px; font-size: 16px; cursor: pointer; transition: opacity 0.3s; }
+        #auth-container .btn:hover{ opacity: 0.9; }
+        #auth-container .error { text-align: center; color: #ff8a80; font-size: 13px; margin-bottom: 12px; min-height: 15px; }
+        #auth-container .toggle-link { text-align: center; margin-top: 20px; font-size: 14px; color: #ccc; }
+        #auth-container .toggle-link a { color: var(--theme-yellow); text-decoration: none; font-weight: bold; margin-left: 5px; }
+
+        /* --- MAIN APP STYLES --- */
+        #app-wrapper { display: none; flex-direction: column; height: 100vh; max-height: 100vh; background: var(--light-bg); color: var(--text-dark); }
+        .header { background: var(--theme-red); padding: 15px; text-align: center; position: sticky; top: 0; width: 100%; z-index: 20; display: flex; justify-content: space-between; align-items: center; color: var(--text-light); box-shadow: 0 2px 10px rgba(0,0,0,0.2); flex-shrink: 0; }
+        .header-title { flex: 1; text-align: center; font-size: 20px; font-weight: bold; }
+        .header-icon { padding-right: 10px; font-size: 20px; cursor: pointer; }
+        .tab-container { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; align-items: center; z-index: 10; padding-bottom: 15px;}
+        .tab-content { display: none; width: 100%; }
+        .tab-content.active { display: block; }
+        .bottom-nav { background: #fff; position: sticky; bottom: 0; width: 100%; display: flex; justify-content: space-around; border-top: 1px solid #e0e0e0; z-index: 20; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); flex-shrink: 0;}
+        .bottom-nav div { flex: 1; padding: 12px 0; text-align: center; color: #888; font-size: 13px; cursor: pointer; display: flex; flex-direction: column; align-items: center; transition: color 0.2s; }
+        .bottom-nav div::before { content: ''; font-size: 22px; margin-bottom: 3px; }
+        .bottom-nav div:nth-child(1)::before { content: '🎲'; } .bottom-nav div:nth-child(2)::before { content: '💣'; }
+        .bottom-nav div:nth-child(3)::before { content: '🎁'; } .bottom-nav div:nth-child(4)::before { content: '👤'; }
+        .bottom-nav .active { color: var(--theme-red); font-weight: bold; }
+
+        /* Profile & Common Card Styles */
+        #profile .profile-card { background: linear-gradient(to top, #fe6a6a, #ff9a8b 40%); border-radius: 0 0 30px 30px; padding: 25px 20px; text-align: center; color: white; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+        #profile .profile-icon { width: 80px; height: 80px; background: var(--theme-yellow); color: var(--text-dark); font-weight: bold; font-size: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; border: 3px solid white; }
+        #profile .profile-name { font-size: 22px; font-weight: 700; } #profile .profile-uid { font-size: 14px; opacity: 0.9; }
+        #profile .info-box { background: white; border-radius: 15px; padding: 15px; font-size: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin: 20px; }
+        #profile .info-row { display: flex; justify-content: space-between; margin: 8px 0; }
+        #profile .wallet-box { background: linear-gradient(135deg, var(--theme-yellow), #ffdb58); color: var(--text-dark); padding: 15px; border-radius: 15px; text-align: center; margin: 20px; box-shadow: 0 4px 15px rgba(255,193,7,0.4); }
+        #profile .wallet-box div:first-child { font-size: 15px; font-weight: 500; } #profile .wallet-box div:last-child { font-size: 28px; font-weight: bold; margin-top: 5px; }
+        #profile .bonus-section { background: linear-gradient(to right, #f83600, #f9d423); padding: 15px; border-radius: 15px; margin: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); text-align: center; cursor: pointer; font-size: 17px; font-weight: bold; color: var(--text-dark); }
+        #profile .option-box { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin: 20px; }
+        #profile .option-buttons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        #profile .option-button { padding: 15px; border-radius: 15px; text-align: center; font-weight: bold; font-size: 16px; color: var(--text-light); box-shadow: 0 4px 8px rgba(0,0,0,0.15); cursor: pointer; }
+        #profile .option-button:nth-child(1) { background: linear-gradient(135deg, #f54ea2, #ff7676); }
+        #profile .option-button:nth-child(2) { background: linear-gradient(135deg, #17ead9, #6078ea); }
+        #profile .option-button:nth-child(3) { background: linear-gradient(135deg, #ffc371, #ff5f6d); }
+        #profile .option-button:nth-child(4) { background: linear-gradient(135deg, #36d1dc, #5b86e5); }
+        #profile .option-button-support { background: linear-gradient(135deg, #00c9ff, #92fe9d); color: var(--text-dark); margin-top: 15px; padding: 15px; border-radius: 15px; text-align: center; font-weight: bold; font-size: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); cursor: pointer; }
+        #profile .logout-button-container { text-align: center; padding-bottom: 20px; }
+        #profile .logout-btn { background: var(--theme-red); color: white; padding: 10px 40px; border: none; font-family: 'Poppins', sans-serif; border-radius: 25px; font-weight: bold; font-size: 15px; cursor: pointer; transition: opacity 0.3s; box-shadow: 0 4px 8px rgba(248,81,81, 0.4); }
+        #profile .logout-btn:hover { opacity: 0.9; }
+
+        /* General Popups & Overlays */
+        .popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 20px 30px; border-radius: 15px; z-index: 1000; display: none; text-align: center; color: var(--text-light); }
+        .popup.success { background: rgba(20, 50, 20, 0.9); border: 2px solid var(--color-green); box-shadow: 0 0 15px var(--color-green); }
+        .popup.error { background: rgba(50, 20, 20, 0.9); border: 2px solid var(--color-red); box-shadow: 0 0 15px var(--color-red); }
+        .popup.casual {
+            background: rgba(0, 0, 0, 0.85);
+            color: var(--text-light);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+            max-width: 250px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .popup h3 { margin-bottom: 8px; }
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); display: none; justify-content: center; align-items: center; flex-direction: column; z-index: 9999; color: var(--theme-red); font-size: 22px; font-weight: bold; }
+        .loading-spinner { border: 4px solid rgba(248, 81, 81, 0.3); border-top: 4px solid var(--theme-red); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .overlay-page { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--light-bg); z-index: 99; display: none; justify-content: flex-start; align-items: center; flex-direction: column; overflow-y: auto; }
+        .overlay-container { background: white; border-radius: 20px; padding: 20px; width: 95%; max-width: 400px; box-shadow: 0 0 15px rgba(0,0,0,0.1); text-align: center; position: relative; margin: 80px 0 20px 0; }
+        .overlay-page .overlay-header { position: fixed; top: 0; left: 0; width: 100%; background: var(--theme-red); color: white; padding: 15px; font-size: 18px; font-weight: bold; display: flex; align-items: center; z-index: 100; }
+        .overlay-back-button { position: absolute; left: 15px; font-size: 24px; cursor: pointer; }
+        .overlay-page h2 { text-align: center; font-size: 22px; color: var(--theme-red); font-weight: bold; flex-grow: 1; }
+        .form-overlay .download-text { color: var(--text-dark); margin: 15px 0 8px; font-size: 14px; font-weight: 500; }
+        .form-overlay .qr-img { width: 180px; max-width: 100%; height: auto; border-radius: 12px; border: 2px solid var(--theme-red); cursor: pointer; }
+        .form-overlay .upi { margin: 10px 0 2px; font-weight: bold; color: var(--text-dark); }
+        .form-overlay .name { font-size: 14px; color: #666; }
+        .form-overlay .copy-btn { margin-top: 8px; padding: 6px 15px; background-color: var(--theme-yellow); border: none; color: var(--text-dark); font-weight: bold; border-radius: 20px; cursor: pointer; }
+        .form-overlay input { width: 100%; padding: 12px; margin-top: 12px; border-radius: 10px; border: 1px solid #ccc; font-size: 15px; color: #000; }
+        .deposit-container .submit-btn, .withdraw-container .submit-btn, .support-overlay .submit-btn { margin-top: 16px; padding: 12px 20px; width: 100%; border: none; border-radius: 25px; background: var(--theme-red); color: white; font-weight: bold; cursor: pointer; font-size: 16px; }
+        .withdraw-container .field-label { font-size: 14px; margin-top: 10px; text-align: left; color: #555; font-weight: 500;}
+        .history-overlay .total-box { background: white; border: 2px solid var(--theme-red); border-radius: 12px; padding: 8px 12px; text-align: center; max-width: 280px; margin: 0 auto 20px auto; font-size: 16px; font-weight: bold; color: var(--theme-red); box-shadow: 0 4px 8px rgba(248,81,81, 0.2); }
+        .history-overlay .history-list { max-width: 100%; margin: auto; }
+        .history-overlay .history-card { background: white; border-left: 5px solid var(--theme-red); border-radius: 12px; margin-bottom: 12px; padding: 12px 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .history-overlay .info-row { display: flex; justify-content: space-between; align-items: center; margin: 8px 0; }
+        .history-overlay .label { font-size: 14px; color: #555; font-weight: 500; }
+        .history-overlay .value { font-size: 14px; color: var(--text-dark); font-weight: 500; word-break: break-word; text-align: right; }
+        .history-overlay .amount-box { background: var(--theme-yellow); color: var(--text-dark); font-weight: bold; padding: 4px 12px; border-radius: 20px; font-size: 14px; }
+        .history-overlay .status { font-size: 13px; font-weight: bold; padding: 4px 12px; border-radius: 20px; color: white; }
+        .history-overlay .success { background: var(--color-green); } .history-overlay .pending { background: var(--theme-yellow); color: var(--text-dark); } .history-overlay .rejected { background: var(--color-red); }
+        .history-overlay .no-history { text-align: center; margin-top: 40px; color: #888; font-style: italic; }
+        .support-overlay .info { margin-bottom: 15px; }
+        .support-overlay .info label { display: block; font-size: 14px; font-weight: 500; color: #555; margin-bottom: 6px; text-align: left; }
+        .support-overlay .info input, .support-overlay .info textarea { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc; font-size: 14px; background: #f9f9f9; color: #333; resize: none; }
+        
+        /* --- LOTTERY GAME STYLES --- */
+        #lottery { background-color: var(--background-grey); color: var(--text-dark); padding: 15px; }
+        .wallet-card { background: white; width: calc(100% - 10px); max-width: 450px; border-radius: 15px; padding: 15px 20px; box-shadow: 0 6px 12px rgba(0,0,0,0.08); margin: 0 auto; position: relative; }
+        .balance-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
+        .balance-left { display: flex; align-items: center; gap: 8px; }
+        .wallet-icon { color: var(--theme-red); font-size: 24px; background-color: #ffebee; padding: 5px; border-radius: 5px; }
+        .balance-amount { font-size: 24px; font-weight: 700; color: #333; }
+        .balance-label { font-size: 13px; color: #888; margin-top: 2px; }
+        .refresh-icon { font-size: 24px; color: #888; cursor: pointer; }
+        .action-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .action-btn { padding: 12px; border: none; border-radius: 25px; font-size: 16px; font-weight: 600; cursor: pointer; }
+        .withdraw { background-color: var(--theme-yellow); color: var(--text-dark); }
+        .deposit { background-color: var(--theme-red); color: white; }
+        .announcement { background: #fff; padding: 10px 15px; display: flex; align-items: center; gap: 10px; font-size: 13px; color: #333; border-radius: 25px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); margin: 15px auto; max-width: 450px; }
+        .announcement-icon { color: var(--theme-red); font-size: 18px; }
+        .announcement-text { flex-grow: 1; overflow: hidden; white-space: nowrap; }
+        .more-btn { background-color: var(--theme-red); color: white; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: 500; }
+        .game-selection-card { background: white; border-radius: 15px; padding: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); max-width: 450px; margin: 15px auto; }
+        .game-selection-tabs { display: flex; justify-content: space-around; }
+        .game-tab { flex: 1; padding: 10px 5px; text-align: center; color: #888; font-size: 13px; font-weight: 500; position: relative; cursor: pointer; }
+        .game-tab.active { color: var(--theme-red); font-weight: 700; }
+        .game-tab.active .game-icon-wrapper { border-color: var(--theme-red); background: #fff7f7; }
+        .game-icon-wrapper { width: 44px; height: 44px; border-radius: 50%; margin: 0 auto 8px auto; display: flex; justify-content: center; align-items: center; background-color: var(--background-grey); border: 2px solid #ddd; }
+        .game-icon { width: 24px; height: 24px; }
+        .game-tab.active .game-icon { filter: none; }
+        .game-tab.active::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 25px; height: 4px; background: var(--theme-red); border-radius: 2px; }
+        .game-info-card { background: var(--theme-red); margin: 15px auto; border-radius: 15px; display: flex; position: relative; box-shadow: 0 4px 8px rgba(248, 81, 81, 0.3); max-width: 450px; }
+        .game-info-card::before, .game-info-card::after { content: ''; position: absolute; width: 20px; height: 20px; background: var(--background-grey); border-radius: 50%; left: 45%; }
+        .game-info-card::before { top: -10px; }
+        .game-info-card::after { bottom: -10px; }
+        .info-left, .info-right { padding: 15px; color: white; width: 50%; }
+        .info-left { border-right: 1px dashed rgba(255,255,255,0.5); font-size: 14px; }
+        .how-to-play { background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 15px; font-size: 12px; margin-bottom: 10px; display: inline-block; cursor: pointer; }
+        .last-results { display: flex; gap: 6px; }
+        .result-pill { width: 24px; height: 24px; border-radius: 50%; border: 2px solid white; display: flex; justify-content: center; align-items: center; font-weight: 700; font-size: 14px; }
+        .pill-green { background: var(--color-green); } .pill-red { background: var(--color-red); } .pill-violet { background-color: var(--color-purple); }
+        .info-right { text-align: center; }
+        .timer-label { font-size: 12px; font-weight: 500; display:flex; align-items:center; justify-content:center; gap: 5px; }
+        .timer-label-icon { width: 14px; height: 14px; filter: brightness(0) invert(1); }
+        .timer-box { display: flex; gap: 2px; margin: 5px 0; justify-content: center; }
+        .timer-digit { background: white; color: var(--theme-red); font-size: 24px; font-weight: 700; padding: 4px 6px; border-radius: 4px; }
+        .timer-separator { font-size: 24px; font-weight: 700; padding: 0 2px; }
+        .period-number { font-size: 13px; }
+        .betting-card { position: relative; background: white; margin: 15px auto; border-radius: 15px; padding: 20px 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); max-width: 450px;}
+        .betting-content { transition: opacity 0.3s; }
+        .betting-card.locked .betting-content { opacity: 0.5; pointer-events: none; }
+        .final-countdown-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.85); z-index: 20; display: none; justify-content: center; align-items: center; font-size: 100px; color: var(--theme-red); font-weight: 900; border-radius: 15px;}
+        .color-selection { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .color-btn, .number-btn, .big-small-btn { cursor: pointer; }
+        .color-btn { padding: 10px; border: none; border-radius: 8px; color: white; font-size: 16px; font-weight: 600; box-shadow: 0 3px 6px rgba(0,0,0,0.15); text-align: center; }
+        .green { background: linear-gradient(145deg, #5cb85c, var(--color-green)); } .purple { background: linear-gradient(145deg, #ab47bc, var(--color-purple)); } .red { background: linear-gradient(145deg, #e57373, var(--color-red)); }
+        .number-selection { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
+        .number-btn { aspect-ratio: 1 / 1; border: none; border-radius: 50%; font-size: 24px; font-weight: 700; position: relative; background-color: #f0f0f0; display: flex; justify-content: center; align-items: center; }
+        .ball-inner { width: 85%; height: 85%; border-radius: 50%; display: flex; justify-content: center; align-items: center; position: relative; overflow: hidden; box-shadow: inset 0 3px 5px rgba(0,0,0,0.1); }
+        .ball-inner::before { content: ''; position: absolute; top: 5%; left: 15%; width: 70%; height: 35%; background: rgba(255,255,255,0.4); border-radius: 50%; transform: rotate(45deg); }
+        .num-red .ball-inner { background: var(--color-red); color: white; } .num-green .ball-inner { background: var(--color-green); color: white; } .num-purple-mix .ball-inner { background: linear-gradient(-45deg, var(--color-red) 49.5%, var(--color-purple) 50.5%); color: white; } .num-green-mix .ball-inner { background: linear-gradient(-45deg, var(--color-green) 49.5%, var(--color-purple) 50.5%); color: white; }
+        .big-small-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .big-small-btn { padding: 12px; border: none; border-radius: 25px; font-size: 18px; font-weight: 700; text-align: center; }
+        .big { background: var(--theme-yellow); color: var(--text-dark); } .small { background: var(--theme-blue); color: white; }
+        .records-section { background: white; margin: 15px auto; border-radius: 15px; padding: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); max-width: 450px;}
+        .records-switch { display: flex; background: #f0f0f0; border-radius: 8px; padding: 4px; }
+        .switch-btn { flex: 1; padding: 8px; border: none; background: transparent; font-size: 14px; font-weight: bold; color: #888; border-radius: 6px; cursor: pointer; }
+        .switch-btn.active { background: #fff; color: var(--theme-red); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .record-content { display: none; padding-top: 5px; }
+        .record-content.active { display: block; }
+        .record-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .record-table th, .record-table td { padding: 10px 5px; text-align: center; border-bottom: 1px solid #f5f5f5; }
+        .record-table th { color: #888; font-weight: 500; }
+        .record-table tr:last-child td { border-bottom: none; }
+        .r-number { display: inline-block; width: 22px; height: 22px; line-height: 22px; border-radius: 50%; color: white; font-weight: bold; }
+        .r-color { font-weight: bold; }
+        .r-color-red { color: var(--color-red); } .r-color-green { color: var(--color-green); } .r-color-purple { color: var(--color-purple); }
+        #my-record-content .r-color-green { color: var(--color-green) !important; font-weight: bold; }
+        #my-record-content .r-color-red { color: var(--color-red) !important; font-weight: bold; }
+        .pagination-controls { text-align: center; padding: 10px; font-size: 14px; color: #888; background: #fafafa; border-radius: 0 0 15px 15px; border-top: 1px solid #f0f0f0; }
+        .pagination-controls button { background: none; border: none; font-size: 16px; cursor: pointer; font-weight: bold; padding: 5px 10px; }
+        .pagination-controls button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .pagination-controls span { margin: 0 15px; }
+        
+        /* --- MINES GAME STYLES --- */
+        .mines-game-container { background: #f1f2f6; color: #333; width: 100%; padding: 15px 20px; flex-grow: 1; display: flex; flex-direction: column; align-items: center; overflow-y: auto; }
+        .mines-game-container .mines-content-wrapper { width: 100%; max-width: 420px; }
+        .mines-game-container .wallet-box { background: white; padding: 12px; text-align: center; color: black; border-radius: 16px; margin-top: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .mines-game-container .wallet-box .amount { font-size: 1.2em; font-weight: bold; }
+        .mines-game-container .wallet-box .label { font-size: 0.9em; color: #444; }
+        .mines-game-container .wallet-buttons { display: flex; justify-content: space-around; margin-top: 10px; }
+        .mines-game-container .wallet-buttons button { padding: 8px 20px; border: none; border-radius: 30px; font-weight: bold; font-size: 0.9em; cursor: pointer; }
+        .mines-game-container .withdraw-btn { background: var(--theme-yellow); color: var(--text-dark); }
+        .mines-game-container .deposit-btn { background: var(--theme-red); color: white; }
+        .mines-game-container .game-container { width: 100%; background: white; padding: 20px; margin: 15px 0; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .mines-game-container .input-group { margin-bottom: 12px; }
+        .mines-game-container .input-group label { display: block; margin-bottom: 5px; font-size: 0.9em; }
+        .mines-game-container .input-group input { width: 100%; padding: 10px; font-size: 1em; font-weight: bold; border: 1px solid #ccc; border-radius: 8px; background: #f9f9f9; color: #000; }
+        .mines-game-container .mines-info { display: flex; justify-content: space-between; background: #f0f0f0; padding: 10px; border-radius: 10px; margin: 15px 0; font-weight: bold; }
+        .mines-game-container .mines-info .label { font-size: 0.85em; color: #555; }
+        .mines-game-container .mines-info .value { font-size: 1.2em; color: var(--color-green); }
+        .mines-game-container .mines-grid { display: none; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 20px 0; }
+        .mines-game-container .mines-grid.show { display: grid; }
+        .mines-game-container .mine-tile { aspect-ratio: 1 / 1; background-color: #e0e0e0; border-radius: 10px; font-size: 1.6em; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: background-color 0.2s;}
+        .mines-game-container .mine-tile:hover { background-color: #d1d1d1; }
+        .mines-game-container .mine-tile.revealed { cursor: default; }
+        .mines-game-container .mine-tile.gem { background-color: var(--color-green); }
+        .mines-game-container .mine-tile.bomb { background-color: var(--color-red); animation: shake 0.3s ease-in-out 2; }
+        .mines-game-container .mine-tile.gem::after { content: '💎'; }
+        .mines-game-container .mine-tile.bomb::after { content: '💣'; }
+        @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-4px); } 50% { transform: translateX(4px); } 75% { transform: translateX(-4px); } 100% { transform: translateX(0); } }
+        #mines_action_btn { width: 100%; padding: 15px; font-size: 1.1em; background: linear-gradient(to right, var(--theme-blue), #17ead9); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        #mines_action_btn.cashout{ background: linear-gradient(to right, #ffafbd, #ffc3a0); }
+
+        /* --- PROMOTION TAB STYLES --- */
+        #promotion { background: #fff; padding: 20px; color: #333; max-width: none; }
+        #promotion .container { max-width: 420px; margin: 0 auto; }
+        #promotion .card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 20px; border: 3px solid var(--theme-red); }
+        #promotion h2, #promotion h3 { text-align: center; margin-bottom: 15px; }
+        #promotion h2 { color: var(--theme-red); }
+        #promotion h3 { color: var(--color-purple); }
+        #promotion .refer-box { background: linear-gradient(to right, #fff3e0, #e3f2fd); padding: 15px; border-radius: 15px; text-align: center; margin-bottom: 20px; }
+        #promotion .refer-box p { font-size: 14px; margin-bottom: 10px; }
+        #promotion .refer-link { font-weight: bold; color: var(--theme-blue); word-break: break-all; }
+        #promotion .btns { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+        #promotion .btn { padding: 10px 15px; border: none; border-radius: 10px; cursor: pointer; font-size: 14px; color: white; background: linear-gradient(to right, #ff6a00, #ee0979); transition: 0.3s; }
+        #promotion .btn:hover { opacity: 0.9; }
+        #promotion .stat-card { background: #fefefe; border: 1px solid #ddd; border-radius: 15px; padding: 15px; }
+        #promotion .stat-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; color: #444; border-bottom: 1px solid #f0f0f0; }
+        #promotion .stat-row:last-child { border-bottom: none; }
+        #promotion .stat-row strong { color: #000; }
+        #promotion .my-invites { background: linear-gradient(to right, #f3e5f5, #e0f2f1); padding: 15px; border-radius: 15px; border: 2px solid var(--color-purple); }
+        #promotion .invite-table { width: 100%; font-size: 13px; border-collapse: collapse; margin-top: 10px; }
+        #promotion .invite-table th, #promotion .invite-table td { padding: 8px; text-align: center; border-bottom: 1px solid #ccc; }
+        #promotion .invite-table th { background: var(--color-purple); color: white; }
+        #promotion .invite-table td { background: #ffffffcc; }
+        #promotion .pagination { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
+        #promotion .pagination button { background: var(--color-purple); color: white; border: none; padding: 6px 12px; border-radius: 10px; cursor: pointer; }
+        #promotion .pagination button:disabled { background: #ccc; cursor: default; }
+        #promotion .footer-note { text-align: center; font-size: 13px; margin-top: 15px; color: #666; }
+
+        /* --- LOTTERY POPUPS --- */
+        .popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; display: none; justify-content: center; transition: opacity 0.2s; opacity: 0; pointer-events: none; }
+        .popup-overlay.show { opacity: 1; pointer-events: auto; display: flex; }
+        #bet-modal { align-items: flex-end; }
+        #how-to-play-modal { align-items: center; }
+        .modal-content { background: white; width: 100%; max-width: 450px; padding: 0; border-radius: 20px 20px 0 0; box-sizing: border-box; }
+        .bet-modal-header { padding: 10px 20px; color: white; clip-path: polygon(0 0, 100% 0, 100% 75%, 85% 100%, 0 100%); }
+        .bet-modal-header h3 { margin: 0; font-size: 16px; }
+        .bet-modal-header p { margin: 5px 0 0; font-size: 14px; background: rgba(255,255,255,0.8); color: #333; padding: 5px 10px; border-radius: 5px; display: inline-block; }
+        .bet-modal-body { padding: 15px; }
+        .bet-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .bet-row label { font-weight: bold; color: #555; font-size: 14px; }
+        .bet-presets { display: flex; }
+        .bet-presets button { padding: 5px 15px; border: 1px solid #ddd; background: #f7f7f7; margin-left: 5px; border-radius: 5px; cursor: pointer; }
+        .bet-presets button.active { border-color: var(--theme-yellow); background: #fff8e1; }
+        .quantity-controls { display: flex; align-items: center; }
+        .quantity-controls button { width: 30px; height: 30px; border: 1px solid #ddd; background: #f7f7f7; font-size: 20px; border-radius: 5px; cursor: pointer; }
+        .quantity-controls span { font-size: 16px; font-weight: bold; width: 40px; text-align: center; }
+        .multiplier-presets { display: flex; justify-content: space-between; }
+        .multiplier-presets button { flex: 1; margin: 0 3px; padding: 5px; border: 1px solid #ddd; background: #f7f7f7; border-radius: 5px; cursor: pointer; }
+        .multiplier-presets button.active { border-color: var(--theme-yellow); background: #fff8e1; }
+        .pre-sale-rules { display: flex; align-items: center; margin: 20px 0; }
+        .pre-sale-rules input { margin-right: 10px; }
+        .pre-sale-rules label { font-size: 14px; color: #555; }
+        .pre-sale-rules a { color: var(--theme-red); text-decoration: none; }
+        .bet-modal-footer { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+        .bet-modal-footer button { padding: 15px; border: none; font-weight: bold; font-size: 16px; cursor: pointer; }
+        .modal-cancel { background: #f0f0f0; color: #333; }
+        .modal-confirm { color: white; }
+        #how-to-play-modal .modal-content { width: 90%; max-width: 400px; padding: 0; border-radius: 15px; }
+        .rules-header { background: var(--theme-red); color: white; padding: 15px; border-radius: 15px 15px 0 0; text-align: center; font-size: 18px; font-weight: bold; }
+        .rules-body { padding: 15px; font-size: 14px; line-height: 1.6; }
+        .rules-body p { margin: 0 0 15px 0; }
+        .rules-body span { font-weight: bold; }
+        .rules-footer { padding: 0 15px 15px; }
+        .rules-footer button { width: 100%; padding: 12px; background: var(--theme-red); color: white; border: none; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        
+        /* --- UPGRADED LOTTERY POPUP STYLES --- */
+        .new-popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; display: none; justify-content: center; align-items: center; background: rgba(0,0,0,0.6); font-family: 'Roboto', sans-serif; }
+        .new-popup-overlay .particles-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .new-popup-overlay .particle { position: absolute; border-radius: 50%; opacity: 0; }
+        .new-popup-overlay.win .particle { background: #FFD700; animation: particle-float 10s infinite; }
+        .new-popup-overlay.lose .particle { background: #bdc3c7; animation: particle-fall 10s infinite; }
+        @keyframes popup-enter { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .popup-container { display: flex; flex-direction: column; align-items: center; animation: popup-enter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; position: relative; z-index: 2; }
+        .popup-card { width: 90vw; max-width: 340px; border-radius: 18px; padding: 20px; padding-top: 60px; position: relative; text-align: center; box-sizing: border-box; box-shadow: 0 10px 40px rgba(0,0,0,0.3); transition: transform 0.1s ease-out; transform-style: preserve-3d; }
+        .popup-header { position: absolute; top: -50px; left: 50%; transform: translateZ(50px) translateX(-50%); z-index: 2; }
+        .icon-wrapper { position: relative; width: 90px; height: 90px; display: flex; justify-content: center; align-items: center; }
+        .icon-ribbon::before, .icon-ribbon::after { content: ''; position: absolute; width: 80px; height: 50px; top: 15px; z-index: -2; }
+        .icon-ribbon::before { left: -35px; transform: perspective(150px) rotateY(35deg); border-radius: 10px 0 0 10px; }
+        .icon-ribbon::after { right: -35px; transform: perspective(150px) rotateY(-35deg); border-radius: 0 10px 10px 0; }
+        .icon-container { width: 90px; height: 90px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 5px solid; position: relative; }
+        @keyframes content-fade-in { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .popup-body > * { opacity: 0; animation: content-fade-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+        .popup-body h2 { animation-delay: 0.2s; }
+        .lottery-result { animation-delay: 0.3s; }
+        #win-popup-new .bonus-slot, #lose-popup-new .try-again-btn { animation-delay: 0.4s; }
+        .popup-body h2 { color: var(--text-light); font-size: 1.7rem; margin: 20px 0; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.4); }
+        .lottery-result { border-radius: 25px; padding: 6px 15px; display: flex; justify-content: space-between; align-items: center; font-weight: 500; box-shadow: inset 0 2px 3px rgba(0,0,0,0.35); margin-bottom: 30px; }
+        .lottery-result .label { color: rgba(255, 255, 255, 0.9); font-size: .9rem; }
+        .lottery-result .tag, .lottery-result .num-circle { text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+        .lottery-result .tag { padding: 5px 14px; border-radius: 15px; color: white; font-size: .9rem; }
+        .lottery-result .num-circle { width: 28px; height: 28px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 1.1rem; font-weight: 700; }
+        .close-popup-btn { background-color: #fff; border-radius: 50%; width: 44px; height: 44px; font-size: 30px; font-weight: 300; color: #555; cursor: pointer; display: flex; justify-content: center; align-items: center; line-height: 1; border: none; box-shadow: 0 2px 5px rgba(0,0,0,0.3); transition: transform 0.2s; opacity: 0; animation: content-fade-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; animation-delay: 0.5s; }
+        .close-popup-btn:hover { transform: scale(1.1); }
+        /* Win Popup Specifics */
+        #win-popup-new .popup-card { background: linear-gradient(180deg, #FB6545, #F84C48); }
+        #win-popup-new .icon-container { background: linear-gradient(135deg, #FFCB44, #FEA435); border-color: #FFBE38; }
+        #win-popup-new .icon-ribbon::before, #win-popup-new .icon-ribbon::after { background: linear-gradient(180deg, #FFB939, #FFA335); }
+        #win-popup-new .icon-container .fa-rocket { font-size: 42px; color: var(--text-light); transform: rotate(-45deg); text-shadow: 0 2px 3px rgba(0,0,0,0.2); }
+        #win-popup-new .bonus-slot { background-color: #D44E39; border-radius: 12px; padding: 5px; margin: 25px auto; width: 95%; height: 95px; box-shadow: inset 0 3px 5px rgba(0,0,0,0.35); position: relative; }
+        #win-popup-new .bonus-ticket { background: #FFFFFF; height: 120px; width: 90%; position: absolute; top: -15px; left: 5%; text-align: center; clip-path: polygon(0% 0%, 100% 0%, 100% 70%, 50% 100%, 0% 70%); box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        #win-popup-new .bonus-ticket::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, #FDEFEF 30%, transparent 70%); }
+        #win-popup-new .bonus-content { position: relative; z-index: 1; padding-top: 15px; }
+        #win-popup-new .bonus-title { color: #D86134; margin: 0; font-weight: 700; text-transform: capitalize; font-size: 0.9rem; }
+        #win-popup-new .bonus-amount { color: #383838; font-size: 2.8rem; font-weight: 900; margin: 2px 0; letter-spacing: -1.5px; }
+        #win-popup-new .bonus-issue { color: #AAAAAA; font-size: 0.8rem; margin: 0; font-weight: 500; }
+        #win-popup-new .lottery-result { background-color: #E45643; }
+        #win-popup-new .tag, #win-popup-new .num-circle { background-color: #EE4D45; }
+        #win-popup-new .close-popup-btn { margin-top: -22px; position: relative; z-index: 10;}
+        #win-popup-new .auto-off-toggle { display: flex; align-items: center; justify-content: center; margin: 20px auto 0; color: rgba(255, 255, 255, 0.9); font-size: 0.85rem; }
+        .toggle-checkbox { display: none; }
+        .toggle-label { width: 24px; height: 24px; background-color: transparent; border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.5); position: relative; cursor: pointer; margin-right: 8px; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #4CAF50; border-color: #4CAF50; }
+        .toggle-checkbox:checked + .toggle-label::after { content: '\2713'; color: white; font-size: 14px; font-weight: bold; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        /* Lose Popup Specifics */
+        #lose-popup-new .popup-card { background: linear-gradient(180deg, #4a5568, #2d3748); }
+        #lose-popup-new .icon-container { background: linear-gradient(135deg, #bdc3c7, #95a5a6); border-color: #a7b4b9; }
+        #lose-popup-new .icon-ribbon::before, #lose-popup-new .icon-ribbon::after { background: linear-gradient(180deg, #7f8c8d, #596162); }
+        #lose-popup-new .icon-container .fa-shield-halved { font-size: 45px; color: #4a5568; text-shadow: 0 1px 2px rgba(0,0,0,0.2); transform: rotate(-10deg); }
+        #lose-popup-new .lottery-result { background-color: #414a58; }
+        #lose-popup-new .tag, #lose-popup-new .num-circle { background-color: #e74c3c; }
+        @keyframes pulse-animation { 0% { transform: scale(1); box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4); } 50% { transform: scale(1.05); box-shadow: 0 6px 25px rgba(52, 152, 219, 0.6); } 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4); } }
+        #lose-popup-new .try-again-btn { background: linear-gradient(180deg, #3498db, #2980b9); color: var(--text-light); border: none; border-radius: 12px; padding: 15px 30px; font-size: 1.2rem; font-weight: 700; width: 80%; margin: 10px auto; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; animation: pulse-animation 2s infinite; transition: all 0.2s ease; }
+        #lose-popup-new .try-again-btn:hover { filter: brightness(1.1); }
+        #lose-popup-new .close-popup-btn { margin-top: 20px; }
+        @keyframes particle-float { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-100vh); opacity: 0; } }
+        @keyframes particle-fall { 0% { transform: translateY(0); opacity: 0.7; } 100% { transform: translateY(100vh); opacity: 0; } }
+    </style>
+</head>
+<body>
+
+<!-- AUTHENTICATION WRAPPER -->
+<div id="auth-wrapper">
+  <div class="auth-header">
+      <div class="auth-header-icon" onclick="showOverlayWithLoading('customerSupport', true)">📞</div>
+  </div>
+  <div id="auth-container">
+    <h2 id="formTitle">Sign Up</h2>
+    <div id="signUpForm">
+      <div class="form-group"><input type="tel" id="regMobile" placeholder="Mobile Number" maxlength="10"></div>
+      <div class="form-group"><input type="password" id="regPassword" placeholder="New Password"></div>
+      <div class="form-group"><input type="password" id="regConfirm" placeholder="Confirm Password"></div>
+      <div class="form-group"><input type="text" id="regRefer" placeholder="Refer Code (optional)"></div>
+      <div class="error" id="registerError"></div>
+      <button class="btn" onclick="handleRegister()">Sign Up</button>
+    </div>
+    <div id="loginForm" style="display: none;">
+      <div class="form-group"><input type="tel" id="loginMobile" placeholder="Mobile Number" maxlength="10"></div>
+      <div class="form-group"><input type="password" id="loginPassword" placeholder="Password"></div>
+      <div class="error" id="loginError"></div>
+      <button class="btn" onclick="handleLogin()">Login</button>
+    </div>
+    <div class="toggle-link" id="toggleLink">Already have an account? <a href="#" onclick="toggleForm()">Login</a></div>
+  </div>
+</div>
+
+<!-- MAIN APP WRAPPER -->
+<div id="app-wrapper">
+  <div class="header">
+    <div class="header-title">GURU WIN</div>
+    <div class="header-icon" onclick="showOverlay('customerSupport')">📞</div>
+  </div>
+
+  <div class="tab-container">
+    <div class="tab-content" id="lottery">
+        <div class="wallet-card">
+             <div class="balance-row">
+                <div class="balance-left">
+                    <div class="wallet-icon">💰</div>
+                    <div>
+                        <div class="balance-amount" id="lotteryBalance">₹0.00</div>
+                        <div class="balance-label">wallet balance</div>
+                    </div>
+                </div>
+                <div class="refresh-icon" onclick="updateAllWalletDisplays()">🔄</div>
+            </div>
+            <div class="action-buttons">
+                <button class="action-btn withdraw" onclick="showOverlayWithLoading('withdraw')">Withdraw</button>
+                <button class="action-btn deposit" onclick="showOverlayWithLoading('deposit')">Deposit</button>
+            </div>
+        </div>
+         <div class="announcement">
+                     <div class="announcement-icon">📢</div>
+                    <marquee class="announcement-text">Dear GURUWIN user: We are very happy that you chose GURU</marquee>
+                    <div class="more-btn"><span>🔥</span> more</div>
+                </div>
+        <div class="game-selection-card">
+             <div class="game-selection-tabs" id="lotteryGameTabs">
+                <div class="game-tab active" data-time="30">
+                    <div class="game-icon-wrapper"><img src='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23f85151"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"/><path d="M13 7h-2v5.414l3.293 3.293 1.414-1.414L13 11.586z"/></svg>' alt="clock" class="game-icon"></div>
+                    Win Go 30s
+                </div>
+                <div class="game-tab" data-time="60">
+                    <div class="game-icon-wrapper"><img src='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23888888"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"/><path d="M13 7h-2v5.414l3.293 3.293 1.414-1.414L13 11.586z"/></svg>' alt="clock" class="game-icon"></div>
+                    Win Go 1Min
+                </div>
+                <div class="game-tab" data-time="180">
+                    <div class="game-icon-wrapper"><img src='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23888888"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"/><path d="M13 7h-2v5.414l3.293 3.293 1.414-1.414L13 11.586z"/></svg>' alt="clock" class="game-icon"></div>
+                    Win Go 3Min
+                </div>
+            </div>
+        </div>
+        <div class="game-info-card">
+             <div class="info-left">
+                <div class="how-to-play">📖 How to play</div>
+                <div class="last-results"></div>
+            </div>
+            <div class="info-right">
+                <div class="timer-label">
+                    <svg class="timer-label-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/></svg>
+                    <span>Time Left</span>
+                </div>
+                <div class="timer-box">
+                    <div id="min1" class="timer-digit">0</div><div id="min2" class="timer-digit">0</div>
+                    <div class="timer-separator">:</div>
+                    <div id="sec1" class="timer-digit">0</div><div id="sec2" class="timer-digit">0</div>
+                </div>
+                <div id="period-number" class="period-number"></div>
+            </div>
+        </div>
+        <div class="betting-card">
+             <div class="final-countdown-overlay"><span class="final-countdown-text"></span></div>
+            <div class="betting-content">
+                <div class="color-selection">
+                    <button class="color-btn green" data-bet-type="color" data-bet-value="Green" data-bet-theme-color="Green">Green</button>
+                    <button class="color-btn purple" data-bet-type="color" data-bet-value="Violet" data-bet-theme-color="Violet">Violet</button>
+                    <button class="color-btn red" data-bet-type="color" data-bet-value="Red" data-bet-theme-color="Red">Red</button>
+                </div>
+                <div class="number-selection">
+                     <button class="number-btn num-purple-mix" data-bet-type="number" data-bet-value="0" data-bet-theme-color="Violet"><div class="ball-inner">0</div></button>
+                     <button class="number-btn num-green" data-bet-type="number" data-bet-value="1" data-bet-theme-color="Green"><div class="ball-inner">1</div></button>
+                     <button class="number-btn num-red" data-bet-type="number" data-bet-value="2" data-bet-theme-color="Red"><div class="ball-inner">2</div></button>
+                     <button class="number-btn num-green" data-bet-type="number" data-bet-value="3" data-bet-theme-color="Green"><div class="ball-inner">3</div></button>
+                     <button class="number-btn num-red" data-bet-type="number" data-bet-value="4" data-bet-theme-color="Red"><div class="ball-inner">4</div></button>
+                     <button class="number-btn num-green-mix" data-bet-type="number" data-bet-value="5" data-bet-theme-color="Violet"><div class="ball-inner">5</div></button>
+                     <button class="number-btn num-red" data-bet-type="number" data-bet-value="6" data-bet-theme-color="Red"><div class="ball-inner">6</div></button>
+                     <button class="number-btn num-green" data-bet-type="number" data-bet-value="7" data-bet-theme-color="Green"><div class="ball-inner">7</div></button>
+                     <button class="number-btn num-red" data-bet-type="number" data-bet-value="8" data-bet-theme-color="Red"><div class="ball-inner">8</div></button>
+                     <button class="number-btn num-green" data-bet-type="number" data-bet-value="9" data-bet-theme-color="Green"><div class="ball-inner">9</div></button>
+                </div>
+                <div class="big-small-actions">
+                    <button class="big-small-btn big" data-bet-type="size" data-bet-value="Big" data-bet-theme-color="Default">Big</button>
+                    <button class="big-small-btn small" data-bet-type="size" data-bet-value="Small" data-bet-theme-color="Blue">Small</button>
+                </div>
+            </div>
+        </div>
+        <div class="records-section">
+            <div class="records-switch">
+                <button id="game-record-btn" class="switch-btn active">Game Record</button>
+                <button id="my-record-btn" class="switch-btn">My Record</button>
+            </div>
+            <div id="game-record-content" class="record-content active">
+                <table class="record-table">
+                    <thead><tr><th>Period</th><th>Number</th><th>Size</th><th>Result</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+                 <div class="pagination-controls" id="game-record-pagination"></div>
+            </div>
+            <div id="my-record-content" class="record-content">
+                <table class="record-table">
+                     <thead><tr><th>Period</th><th>Select</th><th>Result</th><th>Amount</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+                 <div class="pagination-controls" id="my-record-pagination"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="mine">
+      <div class="mines-game-container">
+        <div class="mines-content-wrapper">
+          <div class="wallet-box">
+            <div class="amount">₹<span id="minesWallet">0.00</span></div>
+            <div class="label">wallet balance</div>
+            <div class="wallet-buttons">
+              <button class="withdraw-btn" onclick="showOverlayWithLoading('withdraw')">Withdraw</button>
+              <button class="deposit-btn" onclick="showOverlayWithLoading('deposit')">Deposit</button>
+            </div>
+          </div>
+
+          <div class="game-container">
+            <div class="input-group">
+              <label for="minesBetAmount">💰 Bet Amount</label>
+              <input type="number" id="minesBetAmount" value="10" />
+            </div>
+            <div class="input-group">
+              <label for="mineCount">💣 Number of Mines (1–24)</label>
+              <input type="number" id="mineCount" value="3" min="1" max="24" />
+            </div>
+            <div class="mines-info">
+              <div><div class="label">Next Payout</div><div class="value" id="nextProfit">--</div></div>
+              <div><div class="label">Multiplier</div><div class="value" id="xMultiplier">--</div></div>
+            </div>
+            <div class="mines-grid" id="minesGrid"></div>
+            <button id="mines_action_btn">Start Game</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="promotion">
+      <div class="container">
+        <div class="card">
+          <h2>🎁 Refer & Earn</h2>
+          <div class="refer-box">
+            <p>Invite friends and earn commission on their deposits!</p>
+            <p class="refer-link" id="referLink">https://guruwin.com/ref/123456</p>
+            <div class="btns">
+              <button class="btn" onclick="copyLink()">Copy</button>
+              <button class="btn" onclick="shareLink()">Share</button>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-row"><span>Total Commission:</span> <strong>₹0.00</strong></div>
+            <div class="stat-row"><span>This Week:</span> <strong>₹0.00</strong></div>
+            <div class="stat-row"><span>Direct Subordinates:</span> <strong>0</strong></div>
+            <div class="stat-row"><span>Total Subordinates:</span> <strong>0</strong></div>
+            <div class="stat-row"><span>Level 1 Deposit Count:</span> <strong>0</div>
+            <div class="stat-row"><span>Level 1 Deposit Amount:</span> <strong>₹0</strong></div>
+            <div class="stat-row"><span>Team Deposit Count:</span> <strong>0</div>
+            <div class="stat-row"><span>Team Deposit Amount:</span> <strong>₹0</strong></div>
+          </div>
+        </div>
+        <div class="card my-invites">
+          <h3>📋 My Invites</h3>
+          <table class="invite-table" id="inviteTable">
+            <thead><tr><th>UID</th><th>Mobile</th><th>Deposit</th><th>Date</th></tr></thead>
+            <tbody id="inviteBody"></tbody>
+          </table>
+          <div class="pagination">
+            <button onclick="prevPage()" id="prevBtn">Prev</button>
+            <button onclick="nextPage()" id="nextBtn">Next</button>
+          </div>
+        </div>
+        <p class="footer-note">Only 5 recent invited users are shown per page.</p>
+      </div>
+    </div>
+
+    <div class="tab-content active" id="profile">
+      <div class="profile-card">
+        <div class="profile-icon">GU</div>
+        <div class="profile-name">aayushrajput709</div>
+        <div class="profile-uid">UID: 12345678</div>
+      </div>
+      <div class="info-box">
+        <div class="info-row"><strong>📱 Mobile:</strong> <span>+91 9876543210</span></div>
+        <div class="info-row"><strong>🕒 Last Login:</strong> <span id="lastLogin">--</span></div>
+      </div>
+      <div class="wallet-box">
+        <div>💼 Wallet Balance</div>
+        <div>₹<span id="profileWalletBalance">0.00</span></div>
+      </div>
+      <div class="bonus-section" onclick="claimBonus()">🎁 Daily Lucky Bonus – Tap to Claim!</div>
+      <div class="option-box">
+        <div class="option-buttons">
+          <div class="option-button" onclick="showOverlayWithLoading('deposit')">Deposit</div>
+          <div class="option-button" onclick="showOverlayWithLoading('withdraw')">Withdrawal</div>
+          <div class="option-button" onclick="showOverlayWithLoading('depositHistory')">Deposit History</div>
+          <div class="option-button" onclick="showOverlayWithLoading('withdrawalHistory')">Withdrawal History</div>
+        </div>
+        <div class="option-button-support" onclick="showOverlay('customerSupport')">Customer Support</div>
+      </div>
+      <div class="logout-button-container"><button class="logout-btn" onclick="logout()">Logout</button></div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div onclick="switchTab('lottery')">Lottery</div>
+    <div onclick="switchTab('mine')">Mine</div>
+    <div onclick="switchTab('promotion')">Promotion</div>
+    <div class="active" onclick="switchTab('profile')">Profile</div>
+  </div>
+    
+  <!-- SOUNDS -->
+  <audio id="clickSound" src="https://assets.mixkit.co/sfx/download/mixkit-select-click-1109.wav" preload="auto"></audio>
+  <audio id="tickSound" src="https://assets.mixkit.co/sfx/download/mixkit-tick-tock-clock-timer-1045.wav" preload="auto"></audio>
+  <audio id="gemSound" src="https://assets.mixkit.co/sfx/download/mixkit-video-game-treasure-2066.wav" preload="auto"></audio>
+  <audio id="bombSound" src="https://assets.mixkit.co/sfx/download/mixkit-bomb-explosion-in-battle-2800.wav" preload="auto"></audio>
+  <audio id="winSound" src="https://assets.mixkit.co/sfx/download/mixkit-game-bonus-reached-2065.mp3" preload="auto"></audio>
+  
+  <div class="popup" id="mainPopup">
+    <h3 id="mainPopup-title"></h3>
+    <p id="mainPopup-msg">Default message</p>
+  </div>
+  <div class="loading-overlay" id="loadingOverlay"><div class="loading-spinner"></div>Loading...</div>
+    
+  <!-- LOTTERY POPUPS -->
+  <div id="bet-modal" class="popup-overlay">
+      <div class="modal-content">
+          <div class="bet-modal-header" id="bet-modal-header">
+              <h3 id="bet-modal-title">Win Go</h3>
+              <p>Bet on: <strong id="bet-modal-choice"></strong></p>
+          </div>
+          <div class="bet-modal-body">
+              <div class="bet-row">
+                  <label>Amount</label>
+                  <div class="bet-presets" id="balance-presets">
+                      <button data-amount="1">1</button>
+                      <button data-amount="10">10</button>
+                      <button data-amount="100">100</button>
+                      <button data-amount="1000">1000</button>
+                  </div>
+              </div>
+              <div class="bet-row">
+                  <label>Quantity</label>
+                  <div class="quantity-controls">
+                      <button id="quantity-minus">-</button>
+                      <span id="quantity-display">1</span>
+                      <button id="quantity-plus">+</button>
+                  </div>
+              </div>
+              <div class="bet-row">
+                  <label></label>
+                  <div class="multiplier-presets" id="multiplier-presets">
+                      <button class="active" data-multiplier="1">X1</button>
+                      <button data-multiplier="5">X5</button>
+                      <button data-multiplier="10">X10</button>
+                      <button data-multiplier="20">X20</button>
+                      <button data-multiplier="50">X50</button>
+                      <button data-multiplier="100">X100</button>
+                  </div>
+              </div>
+              <div class="pre-sale-rules">
+                  <input type="checkbox" id="agree-rules" checked>
+                  <label for="agree-rules">I agree to the</label> <a href="#">Pre-sale Rules</a>
+              </div>
+          </div>
+          <div class="bet-modal-footer">
+              <button id="modal-cancel-btn" class="modal-cancel">Cancel</button>
+              <button id="modal-confirm-btn" class="modal-confirm">Total ₹<span id="total-bet-amount">1.00</span></button>
+          </div>
+      </div>
+  </div>
+
+   <div id="how-to-play-modal" class="popup-overlay">
+      <div class="modal-content" style="max-width: 400px; border-radius: 15px;">
+          <div class="rules-header">How to Play Win Go</div>
+          <div class="rules-body">
+              <p>A new round starts every 30/60/180 seconds. Place your bet within the countdown. Results are based on a random number from 0-9.</p>
+              <p><span>Green:</span> If the result is 1, 3, 7, or 9, you win (x2). If it's 5 (Green+Violet), you win (x1.5).</p>
+              <p><span>Red:</span> If the result is 2, 4, 6, or 8, you win (x2). If it's 0 (Red+Violet), you win (x1.5).</p>
+              <p><span>Violet:</span> If the result is 0 or 5, you win (x4.5).</p>
+              <p><span>Number:</span> If you bet on the correct number, you win (x9).</p>
+              <p><span>Size (Big/Small):</span> If the result is not Violet (0 or 5), you win (x2).</p>
+          </div>
+          <div class="rules-footer"><button id="rules-close-btn">Close</button></div>
+      </div>
+  </div>
+
+  <!-- UPGRADED LOTTERY WIN POPUP -->
+    <div id="win-popup-new" class="new-popup-overlay win">
+        <div class="particles-container"></div>
+        <div class="popup-container">
+            <div class="popup-card">
+                <div class="popup-header">
+                    <div class="icon-wrapper"><div class="icon-ribbon"></div><div class="icon-container"><i class="fas fa-rocket"></i></div></div>
+                </div>
+                <div class="popup-body">
+                    <h2>Congratulations on your winning</h2>
+                    <div class="lottery-result">
+                        <span class="label">lottery result</span>
+                        <span class="tag" id="win-popup-res-color">red</span>
+                        <div class="num-circle" id="win-popup-res-num">4</div>
+                        <span class="tag" id="win-popup-res-size">small</span>
+                    </div>
+                    <div class="bonus-slot">
+                        <div class="bonus-ticket">
+                            <div class="bonus-content">
+                                <p class="bonus-title">bonus</p>
+                                <p class="bonus-amount" id="win-popup-res-amount">₹0.00</p>
+                                <p class="bonus-issue" id="win-popup-res-period">Issue: 2025071630215</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="auto-off-toggle">
+                        <input type="checkbox" id="auto-off" class="toggle-checkbox" checked><label for="auto-off" class="toggle-label"></label><span>3s auto shut off</span>
+                    </div>
+                </div>
+            </div>
+            <button class="close-popup-btn">&times;</button>
+        </div>
+    </div>
+
+    <!-- UPGRADED LOTTERY LOSE POPUP -->
+    <div id="lose-popup-new" class="new-popup-overlay lose">
+        <div class="particles-container"></div>
+        <div class="popup-container">
+            <div class="popup-card">
+                <div class="popup-header">
+                    <div class="icon-wrapper"><div class="icon-ribbon"></div><div class="icon-container"><i class="fas fa-shield-halved"></i></div></div>
+                </div>
+                <div class="popup-body">
+                    <h2>So Close... Try Again!</h2>
+                    <div class="lottery-result">
+                        <span class="label">Lottery Result</span>
+                        <span class="tag" id="lose-popup-res-color">Red</span>
+                        <div class="num-circle" id="lose-popup-res-num">4</div>
+                        <span class="tag" id="lose-popup-res-size">Small</span>
+                    </div>
+                    <button class="try-again-btn">Try Again</button>
+                </div>
+            </div>
+            <button class="close-popup-btn">&times;</button>
+        </div>
+    </div>
+
+  <!-- OVERLAY PAGES -->
+  <div class="overlay-page form-overlay" id="depositOverlayPage">
+    <div class="overlay-header"><div class="overlay-back-button" onclick="closeOverlay('deposit')">←</div><h2>Deposit</h2></div>
+    <div class="overlay-container deposit-container">
+      <div class="download-text">⬇️ Click QR to Download or Copy UPI</div>
+      <a id="qrDownload" href="https://ik.imagekit.io/9jxdbc3z2/IMG_20250713_232502.png?updatedAt=1752429661731" download="upi_qr.png">
+        <img src="https://ik.imagekit.co/9jxdbc3z2/IMG_20250713_232502.png?updatedAt=1752429661731" alt="QR" class="qr-img"/>
+      </a>
+      <div class="upi">9516103483@cnrb</div><div class="name">AYUSH RAJPUT</div>
+      <button class="copy-btn" onclick="copyUPI()">Copy UPI ID</button><br>
+      <input type="number" id="depositAmount" placeholder="Enter Amount (Min ₹20)" />
+      <input type="text" id="depositUtr" placeholder="Enter 12-digit UTR/Reference No." />
+      <br><button class="submit-btn" onclick="submitDeposit()">Submit</button>
+    </div>
+  </div>
+
+  <div class="overlay-page form-overlay" id="withdrawOverlayPage">
+    <div class="overlay-header"><div class="overlay-back-button" onclick="closeOverlay('withdraw')">←</div><h2>Withdrawal</h2></div>
+    <div class="overlay-container withdraw-container">
+      <div class="field-label">Full Name</div><input type="text" id="withdrawName" placeholder="Enter Your Name" />
+      <div class="field-label">Mobile Number</div><input type="tel" id="withdrawMobile" placeholder="Enter Mobile Number" maxlength="10" />
+      <div class="field-label">UPI ID</div><input type="text" id="withdrawUpi" placeholder="Enter your UPI ID" />
+      <div class="field-label">Amount (Min ₹20)</div><input type="number" id="withdrawAmount" placeholder="Enter Amount" />
+      <button class="submit-btn" onclick="submitWithdrawal()">Submit</button>
+    </div>
+  </div>
+
+  <div class="overlay-page history-overlay" id="depositHistoryOverlayPage">
+    <div class="overlay-header"><div class="overlay-back-button" onclick="closeOverlay('depositHistory')">←</div><h2>Deposit History</h2></div>
+    <div class="overlay-container"><div class="total-box" id="totalDepositAmountBox">Total Deposit: ₹0</div><div class="history-list" id="depositHistoryContainer"></div></div>
+  </div>
+
+  <div class="overlay-page history-overlay" id="withdrawalHistoryOverlayPage">
+    <div class="overlay-header"><div class="overlay-back-button" onclick="closeOverlay('withdrawalHistory')">←</div><h2>Withdrawal History</h2></div>
+    <div class="overlay-container"><div class="total-box" id="totalWithdrawalAmountBox">Total Withdrawal: ₹0</div><div class="history-list" id="withdrawalHistoryContainer"></div></div>
+  </div>
+
+  <div class="overlay-page support-overlay" id="customerSupportOverlayPage">
+    <div class="overlay-header"><div class="overlay-back-button" onclick="closeOverlay('customerSupport')">←</div><h2>Customer Support</h2></div>
+    <div class="overlay-container">
+      <div class="info"><label for="uid">Game ID (UID)</label><input type="text" id="uid" placeholder="Enter your Game UID (Optional)" /></div>
+      <div class="info"><label for="name">Your Name</label><input type="text" id="name" placeholder="Enter your name" /></div>
+      <div class="info"><label for="mobile">Mobile Number</label><input type="tel" id="mobile" placeholder="Enter your mobile number" /></div>
+      <div class="info"><label for="message">Your Message</label><textarea id="message" rows="4" placeholder="Write your issue or query..."></textarea></div>
+      <button class="submit-btn" onclick="submitSupport()">Submit</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================================================= -->
+<!-- =================================   FIREBASE SETUP   ==================================== -->
+<!-- ========================================================================================= -->
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDmo689NedUgGzVEtzUwcUtLzyiJilfTEA",
+      authDomain: "guru-win-4c120.firebaseapp.com",
+      databaseURL: "https://guru-win-4c120-default-rtdb.firebaseio.com",
+      projectId: "guru-win-4c120",
+      storageBucket: "guru-win-4c120.firebasestorage.app",
+      messagingSenderId: "37147117435",
+      appId: "1:37147117435:web:832735d88a23933a855fde",
+      measurementId: "G-Y6TH9ZJQ9H"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+</script>
+
+<!-- ========================================================================================= -->
+<!-- ===============================   MAIN APP SCRIPT   ===================================== -->
+<!-- ========================================================================================= -->
+
+<script>
+// --- AUTHENTICATION & INITIALIZATION ---
+let isSignUp = true;
+let isFirstLogin = false; 
+
+function toggleForm() {
+    playSound(clickSound); 
+    isSignUp = !isSignUp;
+    document.getElementById('formTitle').textContent = isSignUp ? 'Sign Up' : 'Login';
+    document.getElementById('signUpForm').style.display = isSignUp ? 'block' : 'none';
+    document.getElementById('loginForm').style.display = isSignUp ? 'none' : 'block';
+    document.getElementById('toggleLink').innerHTML = isSignUp ? `Already have an account? <a href="#" onclick="toggleForm()">Login</a>` : `Don't have an account? <a href="#" onclick="toggleForm()">Sign Up</a>`;
+}
+const toEmail = mobile => `${mobile}@guruwin.app`;
+
+function handleLogin() {
+    playSound(clickSound);
+    const mobile = document.getElementById('loginMobile').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+    const error = document.getElementById('loginError');
+    error.textContent = '';
+    if (!mobile || !password) { error.textContent = 'Please fill all fields'; return; }
+    if (mobile.length !== 10 || isNaN(mobile)) { error.textContent = 'Please enter a valid 10-digit mobile number.'; return; }
+    console.log("Attempting login for:", toEmail(mobile)); 
+    auth.signInWithEmailAndPassword(toEmail(mobile), password)
+        .then(userCredential => {
+            console.log("Login successful:", userCredential.user.uid); 
+        })
+        .catch(err => {
+            console.error("Login Error:", err); 
+            error.textContent = "Invalid mobile number or password.";
+        });
+}
+
+function handleRegister() {
+    playSound(clickSound);
+    const mobile = document.getElementById('regMobile').value.trim();
+    const password = document.getElementById('regPassword').value.trim();
+    const confirm = document.getElementById('regConfirm').value.trim();
+    const referCode = document.getElementById('regRefer').value.trim();
+    const error = document.getElementById('registerError');
+    error.textContent = '';
+
+    if (!mobile || !password || !confirm) { error.textContent = 'All fields except Refer Code are required'; return; }
+    if (mobile.length !== 10 || isNaN(mobile)) { error.textContent = 'Please enter a valid 10-digit mobile number.'; return; }
+    if (password.length < 6) { error.textContent = 'Password must be at least 6 characters long.'; return; }
+    if (password !== confirm) { error.textContent = 'Passwords do not match'; return; }
+    console.log("Attempting registration for:", toEmail(mobile)); 
+
+    auth.createUserWithEmailAndPassword(toEmail(mobile), password)
+        .then(userCredential => {
+            const user = userCredential.user;
+            const uid = Math.floor(100000000 + Math.random() * 900000000);
+            const initialUserData = {
+                uid: uid, mobile: mobile, profileName: 'user' + mobile.slice(-6), wallet: 20.00,
+                hasDeposited: false, hideDepositBonus: false,
+                depositHistory: {}, withdrawalHistory: {}, lotteryState: {}, minesState: {}, lastBonusClaimDate: null, usedUTRs: [], invites: {}, registrationDate: new Date().toISOString()
+            };
+            console.log("User registered, UID:", user.uid, "Initial data:", initialUserData); 
+
+            const userRef = db.ref('users/' + user.uid);
+            return userRef.set(initialUserData)
+                .then(() => {
+                    isFirstLogin = true; 
+                    if (referCode) {
+                        db.ref('users').orderByChild('uid').equalTo(parseInt(referCode)).once('value', snapshot => {
+                            if (snapshot.exists()) {
+                                const referrerKey = Object.keys(snapshot.val())[0];
+                                db.ref(`users/${referrerKey}/invites`).push({ 
+                                    uid: uid,
+                                    mobile: mobile,
+                                    date: new Date().toLocaleString(),
+                                    deposit: 0 
+                                });
+                                console.log(`User ${uid} invited by ${referCode}. Referrer's invites updated.`); 
+                            } else {
+                                console.warn(`Refer code ${referCode} not found.`);
+                            }
+                        });
+                    }
+                });
+        })
+        .catch(err => {
+            console.error("Register Error:", err); 
+            error.textContent = err.code === 'auth/email-already-in-use' ? 'This mobile number is already registered.' : err.message;
+        });
+}
+
+function showAppWithLoading() { 
+    document.getElementById('auth-wrapper').style.display = 'none'; 
+    document.getElementById('loadingOverlay').style.display = 'flex'; 
+    setTimeout(() => { 
+        document.getElementById('loadingOverlay').style.display = 'none'; 
+        document.getElementById('app-wrapper').style.display = 'flex'; 
+        console.log("App wrapper displayed."); 
+    }, 1000); 
+}
+
+function initializeApp(user, data) {
+    console.log("Initializing app for user:", user.uid, "with data:", data); 
+    currentUserData = data;
+    document.querySelector('.profile-icon').textContent = "GU";
+    document.querySelector('.profile-name').textContent = data.profileName || 'user' + data.mobile.slice(-6);
+    document.querySelector('.profile-uid').textContent = 'UID: ' + data.uid;
+    document.querySelector('#profile .info-box .info-row span').textContent = '+91 ' + data.mobile;
+    document.getElementById('referLink').textContent = `https://guruwin.com/ref/${data.uid}`;
+    
+    try {
+        startLotteryGame();
+        initializeMinesGame();
+    } catch (e) {
+        console.error("Error during game initialization:", e);
+        showPopup("Error initializing games. Please refresh.", "error");
+    }
+
+    switchTab('lottery'); 
+    updateAllWalletDisplays(); 
+    showAppWithLoading();
+}
+
+// --- GLOBAL APP LOGIC & UTILITIES ---
+let currentUserData = {}; 
+let dbListener = null; 
+let globalGameState = {};
+let globalListener = null;
+let mainGameInterval; 
+let currentDuration = 30; 
+let tempBet = {}; 
+let hostInterval = null;
+let currentActiveTabId = 'profile'; 
+let openedFromAuthPage = false;
+
+const mainPopup = document.getElementById("mainPopup");
+const mainPopupTitle = document.getElementById("mainPopup-title");
+const lastLogin = document.getElementById("lastLogin");
+const loadingOverlay = document.getElementById("loadingOverlay");
+const profileWalletBalanceElement = document.getElementById("profileWalletBalance");
+const lotteryBalanceElement = document.getElementById("lotteryBalance");
+const minesWalletElement = document.getElementById("minesWallet");
+const clickSound = document.getElementById('clickSound');
+
+// Generate unique period ID based on duration and current time
+const generatePeriodId = (duration, date = new Date()) => { 
+    const year = date.getUTCFullYear(); 
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0'); 
+    const day = date.getUTCDate().toString().padStart(2, '0'); 
+    const totalSecondsInDay = date.getUTCHours() * 3600 + date.getUTCMinutes() * 60 + date.getUTCSeconds(); 
+    const periodIndex = Math.floor(totalSecondsInDay / duration) + 1; 
+    return `${year}${month}${day}${periodIndex.toString().padStart(5, '0')}`; 
+};
+
+const generateDeterministicResult = (duration, periodId) => {
+    let number;
+    if (globalGameState[duration] && globalGameState[duration].nextResult !== undefined && globalGameState[duration].nextResult !== null) {
+        number = globalGameState[duration].nextResult;
+        console.log(`Using manual result for period ${periodId} (${duration}s): Number ${number}`);
+    } else {
+        number = Math.floor(Math.random() * 10);
+        console.log(`Using random result for period ${periodId} (${duration}s): Number ${number}`);
+    }
+
+    const color = (number === 0 || number === 5) ? 'Violet' : (number % 2 === 0 ? 'Red' : 'Green');
+    const size = (number >= 5) ? 'Big' : 'Small';
+    return { number, color, size };
+};
+
+function saveUserData() {
+    const user = auth.currentUser;
+    if(user && currentUserData) { 
+        db.ref('users/' + user.uid).set(currentUserData)
+            .catch(error => console.error("Error saving user data:", error));
+    } else {
+        console.warn("Attempted to save user data, but no user is logged in or currentUserData is empty.");
+    }
+}
+
+function updateWallet(amount) {
+    if (currentUserData.wallet === undefined || currentUserData.wallet === null) {
+        currentUserData.wallet = 0; 
+    }
+    currentUserData.wallet = parseFloat((currentUserData.wallet + amount).toFixed(2));
+    saveUserData();
+    console.log("Wallet updated:", currentUserData.wallet); 
+}
+
+function playSound(soundElement) { 
+    if (soundElement) { 
+        soundElement.currentTime = 0; 
+        soundElement.play().catch(e => {
+            // Autoplay policy might prevent sound. Log but don't error.
+        }); 
+    }
+}
+
+function updateAllWalletDisplays() {
+    const balance = currentUserData.wallet || 0;
+    if(profileWalletBalanceElement) profileWalletBalanceElement.textContent = balance.toFixed(2);
+    if(lotteryBalanceElement) lotteryBalanceElement.textContent = balance.toFixed(2);
+    if(minesWalletElement) minesWalletElement.textContent = balance.toFixed(2);
+    const lotteryBalanceDisplay = document.querySelector('#lottery .balance-amount');
+    if (lotteryBalanceDisplay) lotteryBalanceDisplay.textContent = `₹${balance.toFixed(2)}`;
+}
+
+function showPopup(message, type = 'success', displayTitle = true) {
+    mainPopup.className = 'popup ' + type;
+    mainPopupTitle.style.display = 'block';
+
+    if (type === 'success') {
+        mainPopupTitle.innerText = "✅ Success";
+    } else if (type === 'error') {
+        mainPopupTitle.innerText = "❌ Error";
+    } else if (type === 'casual') {
+        mainPopupTitle.style.display = 'none';
+    } else {
+        mainPopupTitle.innerText = "Message";
+    }
+
+    if (!displayTitle) {
+        mainPopupTitle.style.display = 'none';
+    }
+
+    document.getElementById("mainPopup-msg").innerText = message;
+    mainPopup.style.display = "block";
+    setTimeout(() => { mainPopup.style.display = "none"; }, 2500);
+    console.log(`Popup: ${type} - ${message}`); 
+}
+
+function claimBonus() {
+    playSound(clickSound);
+    const today = new Date().toISOString().split('T')[0];
+    if (currentUserData.lastBonusClaimDate === today) { showPopup("You have already claimed your daily bonus.", "error"); return; }
+    
+    let reward;
+    if (currentUserData.wallet <= 0) {
+        reward = 10.00; 
+        showPopup(`Your wallet was empty, so here's a base bonus of ₹${reward.toFixed(2)}!`, "success");
+    } else {
+        reward = parseFloat((Math.random() * (20 - 5 + 1) + 5).toFixed(2)); 
+        showPopup(`You won ₹${reward.toFixed(2)}!`, "success");
+    }
+
+    updateWallet(reward);
+    currentUserData.lastBonusClaimDate = today;
+    saveUserData();
+}
+
+function switchTab(id) {
+    playSound(clickSound);
+    hideAllOverlays();
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    const newTab = document.getElementById(id);
+    if (newTab) newTab.classList.add('active');
+    
+    document.querySelectorAll('.bottom-nav div').forEach(btn => btn.classList.remove('active'));
+    const navButton = document.querySelector(`.bottom-nav div[onclick="switchTab('${id}')"]`);
+    if (navButton) navButton.classList.add('active');
+    
+    currentActiveTabId = id;
+    updateAllWalletDisplays();
+    console.log("Switched to tab:", id); 
+    if (id === 'lottery') {
+        if (!mainGameInterval) startLotteryGame();
+        updateRecordsUI(currentDuration); 
+    } else if (id === 'promotion') {
+        renderInvites();
+    }
+}
+
+function hideAllOverlays() { 
+    document.querySelectorAll('.overlay-page').forEach(page => page.style.display = 'none'); 
+    console.log("All overlays hidden."); 
+}
+
+function showOverlayWithLoading(overlayType, fromAuth = false) {
+    playSound(clickSound);
+    openedFromAuthPage = fromAuth;
+
+    if (openedFromAuthPage) {
+        document.getElementById('auth-wrapper').style.display = 'none';
+    } else {
+        const currentTab = document.getElementById(currentActiveTabId);
+        if (currentTab) currentTab.style.visibility = 'hidden';
+    }
+    
+    loadingOverlay.style.display = 'flex';
+    console.log(`Showing loading overlay for: ${overlayType}. Opened from Auth: ${openedFromAuthPage}`);
+    setTimeout(() => {
+        loadingOverlay.style.display = 'none';
+        hideAllOverlays();
+        const overlayId = overlayType + 'OverlayPage';
+        const targetOverlay = document.getElementById(overlayId);
+        if (targetOverlay) targetOverlay.style.display = 'flex';
+        
+        if (overlayType === 'depositHistory') renderDepositHistory();
+        if (overlayType === 'withdrawalHistory') renderWithdrawalHistory();
+        console.log(`Overlay '${overlayType}' displayed.`);
+    }, 800);
+}
+
+function showOverlay(overlayType, fromAuth = false) {
+    playSound(clickSound);
+    hideAllOverlays();
+
+    openedFromAuthPage = fromAuth;
+
+    if (openedFromAuthPage) {
+        document.getElementById('auth-wrapper').style.display = 'none';
+    } else {
+        const currentTab = document.getElementById(currentActiveTabId);
+        if (currentTab) currentTab.style.visibility = 'hidden';
+    }
+
+    const targetOverlay = document.getElementById(overlayType + 'OverlayPage');
+    if (targetOverlay) targetOverlay.style.display = 'flex';
+    console.log(`Overlay '${overlayType}' displayed. Opened from Auth: ${openedFromAuthPage}`);
+}
+
+function closeOverlay(overlayType) {
+    playSound(clickSound);
+    const targetOverlay = document.getElementById(overlayType + 'OverlayPage');
+    if (targetOverlay) targetOverlay.style.display = 'none';
+    
+    if (openedFromAuthPage) {
+        document.getElementById('auth-wrapper').style.display = 'flex';
+        openedFromAuthPage = false;
+    } else {
+        const currentTab = document.getElementById(currentActiveTabId);
+        if (currentTab) currentTab.style.visibility = 'visible';
+        updateAllWalletDisplays();
+    }
+    console.log(`Overlay '${overlayType}' closed. Returning to ${openedFromAuthPage ? 'Auth' : 'App'} context.`);
+}
+
+function copyUPI() { 
+    playSound(clickSound); 
+    navigator.clipboard.writeText("9516103483@cnrb")
+        .then(() => showPopup("UPI ID Copied!", "casual", false))
+        .catch(err => {
+            console.error('Failed to copy UPI ID:', err);
+            showPopup("Failed to copy UPI ID. Please copy manually.", "error");
+        });
+}
+
+function submitDeposit() {
+    playSound(clickSound);
+    const amount = parseFloat(document.getElementById("depositAmount").value.trim());
+    const utr = document.getElementById("depositUtr").value.trim();
+    
+    if (isNaN(amount) || amount < 20) { showPopup("Minimum deposit is ₹20.", "error"); return; }
+    if (!utr || utr.length !== 12) { showPopup("Please enter a valid 12-digit UTR.", "error"); return; }
+    
+    if (!currentUserData.usedUTRs) currentUserData.usedUTRs = [];
+    if (currentUserData.usedUTRs.includes(utr)) { showPopup("This UTR has already been used.", "error"); return; }
+    
+    currentUserData.usedUTRs.push(utr);
+    
+    // Create deposit record in admin-accessible location
+    const depositId = db.ref('deposits').push().key;
+    const depositData = {
+        id: depositId,
+        userId: currentUserData.mobile,
+        amount: amount.toFixed(2),
+        utr: utr,
+        date: new Date().toISOString(),
+        status: "Pending"
+    };
+    
+    // Save to both user's history and admin deposits
+    db.ref(`deposits/${depositId}`).set(depositData)
+        .then(() => {
+            if (!currentUserData.depositHistory) currentUserData.depositHistory = {};
+            currentUserData.depositHistory[depositId] = depositData;
+            currentUserData.hasDeposited = true;
+            saveUserData();
+
+            // Update referrer's invite record
+            if (auth.currentUser && auth.currentUser.uid) {
+                db.ref('users').once('value', snapshot => {
+                    snapshot.forEach(userSnap => {
+                        const invites = userSnap.val().invites; 
+                        if (invites) {
+                            for (const key in invites) { 
+                                if (invites.hasOwnProperty(key) && invites[key].uid === currentUserData.uid && invites[key].deposit === 0) {
+                                    db.ref(`users/${userSnap.key}/invites/${key}/deposit`).set(amount)
+                                        .then(() => console.log(`Referrer ${userSnap.key}'s invite updated for ${currentUserData.uid}`))
+                                        .catch(err => console.error("Error updating referrer deposit:", err));
+                                    break;
+                                }
+                            }
+                        }
+                    });
+                });
+            }
+
+            showPopup("Deposit request of ₹" + amount.toFixed(2) + " submitted for review!", "success");
+            document.getElementById("depositAmount").value = ''; 
+            document.getElementById("depositUtr").value = '';
+            setTimeout(() => { closeOverlay('deposit'); }, 1500);
+        })
+        .catch(error => {
+            console.error("Error submitting deposit:", error);
+            showPopup("Failed to submit deposit. Please try again.", "error");
+        });
+}
+
+function submitWithdrawal() {
+    playSound(clickSound);
+    const amount = parseFloat(document.getElementById("withdrawAmount").value.trim());
+    const withdrawName = document.getElementById("withdrawName").value.trim();
+    const withdrawMobile = document.getElementById("withdrawMobile").value.trim();
+    const withdrawUpi = document.getElementById("withdrawUpi").value.trim();
+
+    if (isNaN(amount) || amount < 20) { showPopup("Minimum withdrawal is ₹20.", "error"); return; }
+    if (amount > currentUserData.wallet) { showPopup("Insufficient balance.", "error"); return; }
+    if (!withdrawName || !withdrawMobile || !withdrawUpi) { showPopup("Please fill all withdrawal details.", "error"); return; }
+    if (withdrawMobile.length !== 10 || isNaN(withdrawMobile)) { showPopup("Please enter a valid 10-digit mobile number for withdrawal.", "error"); return; }
+
+    updateWallet(-amount); 
+    
+    // Create withdrawal record in admin-accessible location
+    const withdrawalId = db.ref('withdrawals').push().key;
+    const withdrawalData = {
+        id: withdrawalId,
+        userId: currentUserData.mobile,
+        amount: amount.toFixed(2),
+        name: withdrawName,
+        mobile: withdrawMobile,
+        upi: withdrawUpi,
+        date: new Date().toISOString(),
+        status: "Pending"
+    };
+
+    // Save to both user's history and admin withdrawals
+    db.ref(`withdrawals/${withdrawalId}`).set(withdrawalData)
+        .then(() => {
+            if (!currentUserData.withdrawalHistory) currentUserData.withdrawalHistory = {};
+            currentUserData.withdrawalHistory[withdrawalId] = withdrawalData;
+            saveUserData();
+            showPopup("Withdrawal Request Submitted! Amount deducted from wallet.", "success");
+            setTimeout(() => { closeOverlay('withdraw'); }, 1500);
+        })
+        .catch(error => {
+            console.error("Error submitting withdrawal:", error);
+            showPopup("Failed to submit withdrawal. Please try again.", "error");
+            updateWallet(amount);
+        });
+}
+
+function renderDepositHistory() {
+    const data = currentUserData.depositHistory ? Object.values(currentUserData.depositHistory).sort((a,b) => new Date(b.date) - new Date(a.date)) : [];
+    document.getElementById("totalDepositAmountBox").textContent = `Total Deposit: ₹${data.filter(d => d.status === 'Approved').reduce((s,i)=>s+parseFloat(i.amount),0).toFixed(2)}`;
+    document.getElementById("depositHistoryContainer").innerHTML = data.length === 0 ? `<div class="no-history">No deposit history.</div>` : data.map(e => `<div class="history-card"><div class="info-row"><span class="label">Amount</span><span class="amount-box">₹${e.amount}</span></div><div class="info-row"><span class="label">UTR</span><span class="value">${e.utr}</span></div><div class="info-row"><span class="label">Date</span><span class="value">${new Date(e.date).toLocaleString()}</span></div><div class="info-row"><span class="label">Status</span><span class="status ${e.status.toLowerCase()}">${e.status}</span></div></div>`).join('');
+}
+
+function renderWithdrawalHistory() {
+    const data = currentUserData.withdrawalHistory ? Object.values(currentUserData.withdrawalHistory).sort((a,b) => new Date(b.date) - new Date(a.date)) : [];
+    document.getElementById("totalWithdrawalAmountBox").textContent = `Total Withdrawal: ₹${data.filter(w => w.status === 'Approved').reduce((s,i)=>s+parseFloat(i.amount),0).toFixed(2)}`;
+    document.getElementById("withdrawalHistoryContainer").innerHTML = data.length === 0 ? `<div class="no-history">No withdrawal history.</div>` : data.map(e => `<div class="history-card"><div class="info-row"><span class="label">Amount</span><span class="amount-box">₹${e.amount}</span></div><div class="info-row"><span class="label">UPI</span><span class="value">${e.upi}</span></div><div class="info-row"><span class="label">Date</span><span class="value">${new Date(e.date).toLocaleString()}</span></div><div class="info-row"><span class="label">Status</span><span class="status ${e.status.toLowerCase()}">${e.status}</span></div></div>`).join('');
+}
+
+function submitSupport(){ 
+    playSound(clickSound);
+    const uid = document.getElementById('uid').value.trim();
+    const name = document.getElementById('name').value.trim();
+    const mobile = document.getElementById('mobile').value.trim();
+    const message = document.getElementById('message').value.trim();
+
+    if ((!openedFromAuthPage && !uid) || !name || !mobile || !message) {
+        showPopup("Please fill all required fields to submit your query (UID is optional from login/signup).", "error");
+        return;
+    }
+    if (mobile.length !== 10 || isNaN(mobile)) {
+        showPopup("Please enter a valid 10-digit mobile number.", "error");
+        return;
+    }
+
+    // Create support ticket in admin-accessible location
+    const ticketId = db.ref('supportTickets').push().key;
+    const ticketData = {
+        id: ticketId,
+        uid: uid || 'N/A',
+        name: name,
+        mobile: mobile,
+        message: message,
+        timestamp: new Date().toISOString(),
+        status: 'Open',
+        fromAuth: openedFromAuthPage
+    };
+
+    db.ref(`supportTickets/${ticketId}`).set(ticketData)
+        .then(() => {
+            console.log("Support Request:", ticketData);
+            showPopup("Request sent! Our team will contact you soon.", "success"); 
+            
+            document.getElementById('uid').value = '';
+            document.getElementById('name').value = '';
+            document.getElementById('mobile').value = '';
+            document.getElementById('message').value = '';
+
+            setTimeout(() => closeOverlay('customerSupport'), 1500);
+        })
+        .catch(error => {
+            console.error("Error submitting support ticket:", error);
+            showPopup("Failed to submit support request. Please try again.", "error");
+        });
+}
+
+// --- LOTTERY GAME LOGIC ---
+function startLotteryGame() {
+    const ui = {
+        min1: document.getElementById('min1'), min2: document.getElementById('min2'), sec1: document.getElementById('sec1'), sec2: document.getElementById('sec2'), periodDisplay: document.getElementById('period-number'),
+        gameTabs: document.getElementById('lotteryGameTabs'), gameTbody: document.querySelector('#game-record-content tbody'), myGameTbody: document.querySelector('#my-record-content tbody'),
+        gamePagination: document.getElementById('game-record-pagination'), myPagination: document.getElementById('my-record-pagination'), lastResultsContainer: document.querySelector('.last-results'),
+        bettingCard: document.querySelector('.betting-card'), finalCountdownOverlay: document.querySelector('.final-countdown-overlay'), finalCountdownText: document.querySelector('.final-countdown-text'),
+        betModal: document.getElementById('bet-modal'), betModalTitle: document.getElementById('bet-modal-title'), betModalChoice: document.getElementById('bet-modal-choice'), betModalHeader: document.getElementById('bet-modal-header'),
+        totalBetAmount: document.getElementById('total-bet-amount'), quantityDisplay: document.getElementById('quantity-display'), quantityMinus: document.getElementById('quantity-minus'),
+        quantityPlus: document.getElementById('quantity-plus'), recordsSwitch: document.querySelector('.records-switch'), balancePresets: document.getElementById('balance-presets'),
+        multiplierPresets: document.getElementById('multiplier-presets'), howToPlayModal: document.getElementById('how-to-play-modal'), howToPlayBtn: document.querySelector('.how-to-play'),
+        rulesCloseBtn: document.getElementById('rules-close-btn'), modalConfirmBtn: document.getElementById('modal-confirm-btn'), modalCancelBtn: document.getElementById('modal-cancel-btn'),
+    };
+
+    const openBetModal = (type, value, theme) => { 
+        playSound(clickSound); 
+        tempBet = { type, value, amount: 1, quantity: 1, multiplier: 1 }; 
+        const themeColors = { 'Green': 'var(--color-green)', 'Red': 'var(--color-red)', 'Violet': 'var(--color-purple)', 'Blue': 'var(--theme-blue)', 'Default': 'var(--theme-yellow)' }; 
+        const themeColor = themeColors[theme] || themeColors.Default; 
+        ui.betModalHeader.style.background = themeColor; 
+        ui.modalConfirmBtn.style.background = themeColor; 
+        ui.betModalChoice.textContent = value; 
+        ui.betModalTitle.textContent = `Win Go ${currentDuration}s`; 
+        document.querySelectorAll('#balance-presets button.active, #multiplier-presets button.active').forEach(b => b.classList.remove('active')); 
+        document.querySelector('#balance-presets button[data-amount="1"]').classList.add('active'); 
+        document.querySelector('#multiplier-presets button[data-multiplier="1"]').classList.add('active'); 
+        ui.quantityDisplay.textContent = '1'; 
+        updateBetModalTotal(); 
+        ui.betModal.classList.add('show'); 
+        console.log(`Opened bet modal for: ${type}, ${value}`); 
+    };
+
+    const updateBetModalTotal = () => { ui.totalBetAmount.textContent = `${(tempBet.amount * tempBet.quantity * tempBet.multiplier).toFixed(2)}`; };
+    const closeBetModal = () => { ui.betModal.classList.remove('show'); playSound(clickSound); console.log("Bet modal closed.");}; 
+    
+    window.updateRecordsUI = (duration) => {
+        console.log("updateRecordsUI called for duration:", duration); 
+        console.log("Current globalGameState:", globalGameState); 
+
+        const state = globalGameState[duration]; 
+        if (!state) {
+            console.warn(`updateRecordsUI: No state found for duration ${duration}`); 
+            ui.gameTbody.innerHTML = '<tr><td colspan="4">No game records available.</td></tr>';
+            ui.gamePagination.innerHTML = '';
+            ui.lastResultsContainer.innerHTML = '';
+            ui.myGameTbody.innerHTML = '<tr><td colspan="4">No personal records available.</td></tr>';
+            ui.myPagination.innerHTML = '';
+            return;
+        }
+
+        if (!currentUserData.lotteryState) currentUserData.lotteryState = {}; 
+        let myState = currentUserData.lotteryState[duration]; 
+        if (!myState) { myState = { myHistory: [], myPage: 1, gamePage: 1 }; currentUserData.lotteryState[duration] = myState; } 
+        
+        const itemsPerPage = 10; 
+        
+        const gameHistory = state.history || [];
+        console.log(`updateRecordsUI: Processing Game History for ${duration}s. Length: ${gameHistory.length}`); 
+        const gamePages = Math.max(1, Math.ceil(gameHistory.length / itemsPerPage)); 
+        let gamePage = myState.gamePage || 1; 
+        gamePage = Math.min(gamePage, gamePages); 
+        myState.gamePage = gamePage; 
+        ui.gameTbody.innerHTML = gameHistory.slice((gamePage - 1) * itemsPerPage, gamePage * itemsPerPage).map(rec => { 
+            const numPillClass = rec.color === 'Red' ? 'pill-red' : (rec.color === 'Green' ? 'pill-green' : 'pill-violet'); 
+            const textColorClass = rec.color === 'Red' ? 'r-color-red' : (rec.color === 'Green' ? 'r-color-green' : 'r-color-purple'); 
+            return `<tr><td>${rec.period.slice(-4)}</td><td><span class="r-number ${numPillClass}">${rec.number}</span></td><td>${rec.size}</td><td class="r-color ${textColorClass}">${rec.color}</td></tr>`; 
+        }).join(''); 
+        ui.gamePagination.innerHTML = `<button class="prev" ${gamePage === 1 ? 'disabled' : ''}>◀</button><span>${gamePage}/${gamePages}</span><button class="next" ${gamePage >= gamePages ? 'disabled' : ''}>▶</button>`; 
+        
+        ui.lastResultsContainer.innerHTML = gameHistory.slice(0, 5).map(rec => 
+            `<div class="result-pill ${rec.color === 'Red' ? 'pill-red' : (rec.color === 'Green' ? 'pill-green' : 'pill-violet')}">${rec.number}</div>`
+        ).join(''); 
+        console.log("Last results container updated with:", gameHistory.slice(0, 5)); 
+
+        const myHistory = myState.myHistory || [];
+        console.log(`updateRecordsUI: Processing My History for ${duration}s. Length: ${myHistory.length}`); 
+        const myPages = Math.max(1, Math.ceil(myHistory.length / itemsPerPage)); 
+        let myPage = myState.myPage || 1; 
+        myPage = Math.min(myPage, myPages); 
+        myState.myPage = myPage; 
+        ui.myGameTbody.innerHTML = myHistory.length === 0 ? '<tr><td colspan="4">No personal records yet.</td></tr>' : myHistory.slice((myPage - 1) * itemsPerPage, myPage * itemsPerPage).map(rec => { 
+            const resultColorClass = rec.win ? 'r-color-green' : 'r-color-red'; 
+            const resultText = rec.win ? 'Win' : 'Lose'; 
+            const amountText = rec.win ? `+₹${rec.payout.toFixed(2)}` : `-₹${rec.amount.toFixed(2)}`; 
+            return `<tr><td>${rec.period.slice(-4)}</td><td>${rec.value}</td><td class="${resultColorClass}">${resultText}</td><td class="${resultColorClass}">${amountText}</td></tr>`; 
+        }).join(''); 
+        ui.myPagination.innerHTML = `<button class="prev" ${myPage === 1 ? 'disabled' : ''}>◀</button><span>${myPage}/${myPages}</span><button class="next" ${myPage >= myPages ? 'disabled' : ''}>▶</button>`; 
+        saveUserData();
+    };
+    
+    const mainTick = () => { 
+        const now = new Date(); 
+        const activeDuration = currentDuration; 
+        const periodData = globalGameState[activeDuration];
+        let remainingSeconds = activeDuration;
+        let periodId = "Loading...";
+
+        if (periodData && periodData.currentPeriodId) {
+            periodId = periodData.currentPeriodId;
+            const totalSecondsInDay = now.getUTCHours() * 3600 + now.getUTCMinutes() * 60 + now.getUTCSeconds();
+            remainingSeconds = activeDuration - (totalSecondsInDay % activeDuration);
+        } else {
+            const totalSecondsInDay = now.getUTCHours() * 3600 + now.getUTCMinutes() * 60 + now.getUTCSeconds();
+            remainingSeconds = activeDuration - (totalSecondsInDay % activeDuration);
+            periodId = generatePeriodId(activeDuration, now); 
+        }
+
+        if(ui.periodDisplay) ui.periodDisplay.textContent = periodId; 
+        
+        if (remainingSeconds <= 5) { 
+            ui.bettingCard.classList.add('locked'); 
+            ui.finalCountdownOverlay.style.display = 'flex'; 
+            ui.finalCountdownText.textContent = remainingSeconds.toString().padStart(2, '0'); 
+            if (remainingSeconds === 5) { playSound(document.getElementById('tickSound')); } 
+        } else { 
+            ui.bettingCard.classList.remove('locked'); 
+            ui.finalCountdownOverlay.style.display = 'none'; 
+        } 
+        
+        const minutes = Math.floor(remainingSeconds / 60).toString().padStart(2, '0'); 
+        const secs = (remainingSeconds % 60).toString().padStart(2, '0'); 
+        if(ui.min1) ui.min1.textContent = minutes[0]; 
+        if(ui.min2) ui.min2.textContent = minutes[1]; 
+        if(ui.sec1) ui.sec1.textContent = secs[0]; 
+        if(ui.sec2) ui.sec2.textContent = secs[1]; 
+        
+        updateRecordsUI(activeDuration); 
+    };
+
+    const startGame = () => { 
+        clearInterval(mainGameInterval); 
+        mainGameInterval = setInterval(mainTick, 1000); 
+        console.log("Lottery game timer started."); 
+    };
+
+    const handleBetConfirmation = () => { 
+        playSound(clickSound); 
+        const totalBetAmount = tempBet.amount * tempBet.quantity * tempBet.multiplier; 
+        if (isNaN(totalBetAmount) || totalBetAmount <= 0) { showPopup("Invalid bet amount.", "error"); return; } 
+        if (totalBetAmount > currentUserData.wallet) { showPopup("Insufficient balance.", "error"); return; } 
+        
+        updateWallet(-totalBetAmount); 
+        
+        const periodId = ui.periodDisplay.textContent; 
+        const betId = db.ref('lotteryBets').push().key;
+        const betData = {
+            id: betId,
+            userId: currentUserData.mobile,
+            period: periodId,
+            bet: tempBet.value,
+            amount: totalBetAmount,
+            result: 'Pending',
+            timestamp: new Date().toISOString()
+        };
+
+        // Save bet to admin-accessible location
+        db.ref(`lotteryBets/${betId}`).set(betData)
+            .then(() => {
+                if(!currentUserData.lotteryState) currentUserData.lotteryState = {}; 
+                if(!currentUserData.lotteryState[currentDuration]) currentUserData.lotteryState[currentDuration] = { myHistory: [], activeBets: [], myPage: 1, gamePage: 1 }; 
+                if(!currentUserData.lotteryState[currentDuration].activeBets) currentUserData.lotteryState[currentDuration].activeBets = []; 
+                
+                currentUserData.lotteryState[currentDuration].activeBets.push({ 
+                    ...tempBet, 
+                    amount: totalBetAmount, 
+                    period: periodId,
+                    timestamp: new Date().getTime() 
+                }); 
+                saveUserData(); 
+                closeBetModal(); 
+                showPopup("Bet successful!", "casual", false);
+                console.log(`Bet placed: ${tempBet.value} for period ${periodId}, amount ${totalBetAmount}`);
+            })
+            .catch(error => {
+                console.error("Error placing bet:", error);
+                updateWallet(totalBetAmount); // Refund on error
+                showPopup("Failed to place bet. Please try again.", "error");
+            });
+    };
+    
+    if(ui.bettingCard) ui.bettingCard.addEventListener('click', (e) => { const target = e.target.closest('[data-bet-type]'); if (target && !ui.bettingCard.classList.contains('locked')) openBetModal(target.dataset.betType, target.dataset.betValue, target.dataset.betThemeColor); });
+    if(ui.modalConfirmBtn) ui.modalConfirmBtn.addEventListener('click', handleBetConfirmation);
+    if(ui.modalCancelBtn) ui.modalCancelBtn.addEventListener('click', closeBetModal);
+    if(ui.balancePresets) ui.balancePresets.addEventListener('click', e => { if(e.target.dataset.amount) { document.querySelectorAll('#balance-presets .active').forEach(btn => btn.classList.remove('active')); e.target.classList.add('active'); tempBet.amount = parseInt(e.target.dataset.amount, 10); updateBetModalTotal(); playSound(clickSound); } });
+    if(ui.multiplierPresets) ui.multiplierPresets.addEventListener('click', (e) => { if (e.target.tagName === 'BUTTON') { document.querySelectorAll('#multiplier-presets .active').forEach(btn => btn.classList.remove('active')); e.target.classList.add('active'); tempBet.multiplier = parseInt(e.target.dataset.multiplier, 10); updateBetModalTotal(); playSound(clickSound); } });
+    if(ui.quantityMinus) ui.quantityMinus.addEventListener('click', () => { if (tempBet.quantity > 1) { tempBet.quantity--; ui.quantityDisplay.textContent = tempBet.quantity; updateBetModalTotal(); playSound(clickSound); } });
+    if(ui.quantityPlus) ui.quantityPlus.addEventListener('click', () => { tempBet.quantity++; ui.quantityDisplay.textContent = tempBet.quantity; updateBetModalTotal(); playSound(clickSound); } );
+    if(ui.gameTabs) ui.gameTabs.addEventListener('click', function(e) { const tab = e.target.closest('.game-tab'); if(!tab) return; playSound(clickSound); document.querySelectorAll('.game-tab').forEach(t => { t.classList.remove('active'); t.querySelector('.game-icon').src = t.querySelector('.game-icon').src.replace('%23f85151', '%23888888'); }); tab.classList.add('active'); tab.querySelector('.game-icon').src = tab.querySelector('.game-icon').src.replace('%23888888', '%23f85151'); currentDuration = parseInt(tab.dataset.time, 10); mainTick(); 
+    console.log("Switched lottery game duration to:", currentDuration, "s"); 
+    });
+
+    if(ui.recordsSwitch) ui.recordsSwitch.addEventListener('click', (e) => { const target = e.target.closest('.switch-btn'); if (target) { playSound(clickSound); document.querySelector('.switch-btn.active').classList.remove('active'); target.classList.add('active'); document.querySelector('.record-content.active').classList.remove('active'); document.getElementById(target.id === 'my-record-btn' ? 'my-record-content' : 'game-record-content').classList.add('active'); console.log("Switched records view to:", target.id); } }); 
+    
+    const createPaginationHandler = (type) => (e) => { 
+        playSound(clickSound);
+        if (e.target.tagName !== 'BUTTON') return;
+
+        const state = (type === 'game') ? globalGameState[currentDuration] : currentUserData.lotteryState[currentDuration]; 
+        if (!state) { console.warn(`Pagination: No state for duration ${currentDuration} (${type} type)`); return; }
+
+        const history = (type === 'game') ? (state.history || []) : (currentUserData.lotteryState[currentDuration]?.myHistory || []); 
+        let pageKey = `${type}Page`; 
+        
+        let currentPageNum = state[pageKey] || 1; 
+        const total = Math.max(1, Math.ceil(history.length / 10)); 
+
+        if(e.target.classList.contains('prev') && currentPageNum > 1) { 
+            currentPageNum--; 
+        } else if (e.target.classList.contains('next') && currentPageNum < total) { 
+            currentPageNum++; 
+        } 
+        
+        if (type === 'my') { 
+            if(!currentUserData.lotteryState[currentDuration]) currentUserData.lotteryState[currentDuration] = {};
+            currentUserData.lotteryState[currentDuration].myPage = currentPageNum; 
+        } else { 
+            if(!globalGameState[currentDuration]) globalGameState[currentDuration] = {};
+            globalGameState[currentDuration].gamePage = currentPageNum; 
+        }
+        
+        updateRecordsUI(currentDuration); 
+        console.log(`Pagination changed for ${type} records to page ${currentPageNum}`); 
+    };
+
+    if(ui.gamePagination) ui.gamePagination.addEventListener('click', createPaginationHandler('game'));
+    if(ui.myPagination) ui.myPagination.addEventListener('click', createPaginationHandler('my'));
+    if(ui.howToPlayBtn) ui.howToPlayBtn.addEventListener('click', () => { playSound(clickSound); ui.howToPlayModal.classList.add('show'); console.log("How to play modal shown."); }); 
+    if(ui.rulesCloseBtn) ui.rulesCloseBtn.addEventListener('click', () => { playSound(clickSound); ui.howToPlayModal.classList.remove('show'); console.log("How to play modal closed."); }); 
+    
+    startGame();
+}
+
+// --- MINES GAME LOGIC ---
+function initializeMinesGame() { 
+    const minesGrid = document.getElementById('minesGrid'); 
+    const minesBetInput = document.getElementById('minesBetAmount'); 
+    const minesMineCountInput = document.getElementById('mineCount'); 
+    const minesProfitEl = document.getElementById('nextProfit'); 
+    const minesMultiplierEl = document.getElementById('xMultiplier'); 
+    const minesActionBtn = document.getElementById('mines_action_btn'); 
+    
+    let isMinesPlaying = false;
+    let minesMinePositions = [];
+    let minesSelectedTiles = [];
+    let minesGemsFound = 0;
+    let minesCurrentMultiplier = 1;
+    let minesBetAmount = 0;
+    let initialBetAmount = 0; 
+    let currentGameId = null;
+
+    const minesFactorial = n => n <= 1 ? 1 : n * minesFactorial(n - 1); 
+    const minesCombinations = (n, k) => (k < 0 || k > n) ? 0 : minesFactorial(n) / (minesFactorial(k) * minesFactorial(n - k)); 
+    
+    const minesCalculateMultiplier = (mines, gems) => { 
+        if (gems === 0) return 1.00; 
+        const totalTiles = 25;
+        const remainingTiles = totalTiles - mines;
+        
+        const denCombinations = minesCombinations(totalTiles - minesSelectedTiles.length + gems, gems);
+        const numCombinations = minesCombinations(remainingTiles, gems);
+
+        const winChances = (denCombinations > 0) ? numCombinations / denCombinations : 0;
+        return winChances > 0 ? (1 / winChances * 0.97).toFixed(2) : 0; 
+    }; 
+    
+    const minesGenerateMines = count => { 
+        const p = new Set(); 
+        while (p.size < count) p.add(Math.floor(Math.random() * 25)); 
+        return Array.from(p); 
+    }; 
+    
+    function minesCreateGrid() { 
+        minesGrid.innerHTML = ''; 
+        minesGrid.classList.remove('show'); 
+        minesGrid.classList.add('show'); 
+        for (let i = 0; i < 25; i++) { 
+            const tile = document.createElement('div'); 
+            tile.className = 'mine-tile'; 
+            tile.dataset.index = i; 
+            tile.onclick = () => { 
+                if (isMinesPlaying && !tile.classList.contains('revealed')) {
+                    revealTile(tile, i); 
+                }
+            }; 
+            minesGrid.appendChild(tile); 
+        } 
+        console.log("Mines grid created."); 
+    } 
+    
+    function revealTile(tile, index) { 
+        tile.classList.add('revealed'); 
+        minesSelectedTiles.push(index); 
+        
+        if (minesMinePositions.includes(index)) { 
+            playSound(document.getElementById('bombSound')); 
+            tile.classList.add('bomb'); 
+            isMinesPlaying = false; 
+            minesActionBtn.textContent = 'Start Game'; 
+            minesActionBtn.classList.remove('cashout'); 
+            
+            minesMinePositions.forEach(pos => { 
+                if (!minesSelectedTiles.includes(pos)) {
+                    minesGrid.children[pos].classList.add('bomb', 'revealed'); 
+                }
+            }); 
+
+            // Update game record as lost
+            if (currentGameId) {
+                db.ref(`minesGames/${currentGameId}`).update({
+                    status: 'Lost',
+                    endTime: new Date().toISOString(),
+                    gemsFound: minesGemsFound,
+                    revealedTiles: minesSelectedTiles
+                });
+            }
+
+            showPopup("💥 You hit a bomb! Game over.", "error"); 
+            console.log("Mines game over: Bomb hit at index", index); 
+        } else { 
+            playSound(document.getElementById('gemSound')); 
+            tile.classList.add('gem'); 
+            minesGemsFound++; 
+            
+            minesCurrentMultiplier = minesCalculateMultiplier(parseInt(minesMineCountInput.value), minesGemsFound); 
+            const profit = (minesBetAmount * minesCurrentMultiplier); 
+            minesMultiplierEl.textContent = `${minesCurrentMultiplier}x`; 
+            minesProfitEl.textContent = `₹${profit.toFixed(2)}`; 
+            console.log(`Mines game: Gem found. Gems: ${minesGemsFound}, Multiplier: ${minesCurrentMultiplier}`); 
+        } 
+    } 
+    
+    minesActionBtn.onclick = () => { 
+        playSound(clickSound); 
+        if (!isMinesPlaying) { 
+            minesBetAmount = parseFloat(minesBetInput.value); 
+            const mineCount = parseInt(minesMineCountInput.value);
+
+            if (isNaN(minesBetAmount) || minesBetAmount <= 0) { 
+                showPopup("Invalid bet amount.", "error"); return; 
+            }
+            if (mineCount < 1 || mineCount > 24 || isNaN(mineCount)) {
+                showPopup("Number of mines must be between 1 and 24.", "error"); return;
+            }
+            if (minesBetAmount > currentUserData.wallet) { 
+                showPopup("Insufficient balance.", "error"); return; 
+            } 
+            
+            updateWallet(-minesBetAmount); 
+            initialBetAmount = minesBetAmount; 
+
+            // Create game record in admin-accessible location
+            currentGameId = db.ref('minesGames').push().key;
+            const gameData = {
+                id: currentGameId,
+                userId: currentUserData.mobile,
+                betAmount: minesBetAmount,
+                mineCount: mineCount,
+                minesPositions: minesMinePositions = minesGenerateMines(mineCount),
+                startTime: new Date().toISOString(),
+                status: 'Started'
+            };
+
+            db.ref(`minesGames/${currentGameId}`).set(gameData);
+
+            minesSelectedTiles = []; 
+            minesGemsFound = 0; 
+            minesCurrentMultiplier = 1.00; 
+            minesMultiplierEl.textContent = '1.00x'; 
+            minesProfitEl.textContent = `₹0.00`; 
+            minesCreateGrid(); 
+            isMinesPlaying = true; 
+            minesActionBtn.textContent = '💸 Cash Out'; 
+            minesActionBtn.classList.add('cashout'); 
+            console.log(`Mines game started: Bet ₹${minesBetAmount}, Mines: ${mineCount}`); 
+        } else { 
+            if (minesGemsFound === 0) {
+                showPopup("You must reveal at least one gem to cash out.", "error");
+                return;
+            }
+            const profit = initialBetAmount * minesCurrentMultiplier; 
+            updateWallet(profit); 
+            playSound(document.getElementById('winSound')); 
+
+            // Update game record as cashed out
+            if (currentGameId) {
+                db.ref(`minesGames/${currentGameId}`).update({
+                    status: 'CashedOut',
+                    endTime: new Date().toISOString(),
+                    gemsFound: minesGemsFound,
+                    finalMultiplier: minesCurrentMultiplier,
+                    winnings: profit,
+                    revealedTiles: minesSelectedTiles
+                });
+            }
+
+            showPopup(`You cashed out ₹${profit.toFixed(2)}!`, "success"); 
+            isMinesPlaying = false; 
+            minesActionBtn.textContent = 'Start Game'; 
+            minesActionBtn.classList.remove('cashout'); 
+            minesMinePositions.forEach(pos => { 
+                if (!minesSelectedTiles.includes(pos)) {
+                    minesGrid.children[pos].classList.add('bomb', 'revealed'); 
+                }
+            }); 
+            console.log(`Mines game cashed out: Profit ₹${profit.toFixed(2)}`); 
+        } 
+    }; 
+}
+
+// --- PROMOTION TAB LOGIC ---
+function copyLink() { 
+    playSound(clickSound); 
+    const link = document.getElementById('referLink').innerText; 
+    navigator.clipboard.writeText(link)
+        .then(() => showPopup("Referral link copied!", "casual", false))
+        .catch(err => {
+            console.error('Failed to copy link:', err);
+            showPopup("Failed to copy link. Please copy manually.", "error");
+        });
+}
+
+function shareLink() { 
+    playSound(clickSound); 
+    const link = document.getElementById('referLink').innerText; 
+    if (navigator.share) { 
+        navigator.share({ title: 'Join GURU WIN', text: 'Earn by playing games!', url: link })
+            .catch(error => console.error('Error sharing:', error)); 
+    } else { 
+        showPopup("Sharing not supported on this device.", "error"); 
+    } 
+}
+
+let currentPage = 0; 
+const perPage = 5;
+
+function renderInvites() { 
+    const invites = currentUserData.invites ? Object.values(currentUserData.invites) : []; 
+    const start = currentPage * perPage; 
+    const end = start + perPage; 
+    const visible = invites.slice(start, end); 
+    const tbody = document.getElementById("inviteBody"); 
+    if (!tbody) return; 
+    tbody.innerHTML = visible.length === 0 ? '<tr><td colspan="4">No invites yet</td></tr>' : visible.map(i => `<tr><td>${i.uid}</td><td>${i.mobile}</td><td>₹${i.deposit || 0}</td><td>${i.date}</td></tr>`).join(''); 
+    document.getElementById("prevBtn").disabled = currentPage === 0; 
+    document.getElementById("nextBtn").disabled = end >= invites.length; 
+    console.log("Invites rendered. Current page:", currentPage, "Total invites:", invites.length); 
+}
+
+function nextPage() { 
+    playSound(clickSound); 
+    currentPage++; 
+    renderInvites(); 
+} 
+
+function prevPage() { 
+    playSound(clickSound); 
+    currentPage--; 
+    renderInvites(); 
+}
+
+// --- UPGRADED LOTTERY POPUP LOGIC ---
+const winPopup = document.getElementById('win-popup-new'); 
+const losePopup = document.getElementById('lose-popup-new');
+
+function showLotteryWinPopup(result, winnings) { 
+    playSound(document.getElementById('winSound')); 
+    document.getElementById('win-popup-res-color').textContent = result.color; 
+    document.getElementById('win-popup-res-num').textContent = result.number; 
+    document.getElementById('win-popup-res-size').textContent = result.size; 
+    document.getElementById('win-popup-res-amount').textContent = `₹${winnings.toFixed(2)}`; 
+    document.getElementById('win-popup-res-period').textContent = `Issue: ${result.period}`; 
+    winPopup.style.display = 'flex'; 
+    
+    createParticles(winPopup.querySelector('.particles-container'), 'win');
+
+    const autoOffCheckbox = winPopup.querySelector('#auto-off'); 
+    let autoCloseTimer = null; 
+    const startAutoClose = () => { 
+        clearTimeout(autoCloseTimer); 
+        if(autoOffCheckbox.checked) { 
+            autoCloseTimer = setTimeout(() => winPopup.style.display = 'none', 3000); 
+        } 
+    }; 
+    autoOffCheckbox.onchange = startAutoClose; 
+    startAutoClose(); 
+    console.log(`Win popup shown for period ${result.period}, winnings: ₹${winnings.toFixed(2)}`); 
+}
+
+function showLotteryLossPopup(result) { 
+    playSound(document.getElementById('bombSound')); 
+    document.getElementById('lose-popup-res-color').textContent = result.color; 
+    document.getElementById('lose-popup-res-num').textContent = result.number; 
+    document.getElementById('lose-popup-res-size').textContent = result.size; 
+    losePopup.style.display = 'flex'; 
+
+    createParticles(losePopup.querySelector('.particles-container'), 'lose');
+    console.log(`Lose popup shown for period ${result.period}`); 
+}
+
+document.querySelectorAll('.new-popup-overlay .close-popup-btn, #lose-popup-new .try-again-btn').forEach(btn => { 
+    btn.addEventListener('click', () => { 
+        btn.closest('.new-popup-overlay').style.display = 'none'; 
+        const particlesContainer = btn.closest('.new-popup-overlay').querySelector('.particles-container');
+        if (particlesContainer) particlesContainer.innerHTML = '';
+        console.log("Lottery result popup closed."); 
+    }); 
+});
+
+function createParticles(container, type) {
+    if (!container) return;
+    container.innerHTML = ''; 
+    const particleCount = type === 'win' ? 30 : 20; 
+    const colors = type === 'win' ? ['#FFD700', '#FFEA00', '#FFC107'] : ['#bdc3c7', '#7f8c8d'];
+
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        particle.style.width = particle.style.height = `${Math.random() * 8 + 4}px`; 
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = type === 'win' ? '100%' : '0%'; 
+        particle.style.animationDuration = `${Math.random() * 5 + 5}s`; 
+        particle.style.animationDelay = `${Math.random() * 2}s`; 
+        particle.style.opacity = '1'; 
+        container.appendChild(particle);
+    }
+}
+
+// --- HOST LOGIC FOR GLOBAL SYNCHRONIZATION ---
+function startHostLogic(uid) {
+    if (hostInterval) clearInterval(hostInterval); 
+    const hostRef = db.ref('game_host');
+    hostRef.onDisconnect().remove(); 
+    console.log(`Attempting to start host logic for UID: ${uid}`); 
+
+    hostInterval = setInterval(() => {
+        hostRef.transaction(currentHost => {
+            if (currentHost === null || currentHost === uid) {
+                return uid;
+            }
+            return undefined;
+        })
+        .then(result => {
+            if (result.committed && result.snapshot.val() === uid) {
+                [30, 60, 180].forEach(duration => {
+                    const now = new Date();
+                    const currentPeriodId = generatePeriodId(duration, now);
+                    const state = globalGameState[duration] || {};
+
+                    if (state.currentPeriodId !== currentPeriodId) {
+                        const updates = {};
+                        updates[`/game_state/${duration}/currentPeriodId`] = currentPeriodId;
+
+                        let previousPeriodResult = null;
+                        if (state.currentPeriodId) { 
+                            previousPeriodResult = generateDeterministicResult(duration, state.currentPeriodId);
+
+                            let history = state.history || []; 
+                            history.unshift({ period: state.currentPeriodId, ...previousPeriodResult });
+                            if (history.length > 50) history.pop(); 
+                            updates[`/game_state/${duration}/history`] = history;
+
+                            if (state.nextResult !== undefined && state.nextResult !== null) {
+                                updates[`/game_state/${duration}/nextResult`] = null;
+                                console.log(`Host ${uid}: Cleared manual result for ${duration}s. Was: ${state.nextResult}`);
+                            }
+
+                            console.log(`Host ${uid}: Updating Firebase for ${duration}s. New Period: ${currentPeriodId}, Prev Result:`, previousPeriodResult, "New History length:", history.length);
+                        } else {
+                            console.log(`Host ${uid}: Initializing game state for ${duration}s. New Period: ${currentPeriodId}`);
+                        }
+                        
+                        db.ref().update(updates)
+                            .then(() => {
+                                console.log(`Host ${uid}: Firebase game state updated successfully for ${duration}s.`);
+                                if (previousPeriodResult) { 
+                                    processLotteryBets(duration, state.currentPeriodId, previousPeriodResult);
+                                }
+                            })
+                            .catch(error => console.error(`Host ${uid}: Error updating game state for ${duration}s:`, error));
+                    }
+                });
+            }
+        })
+        .catch(error => {
+            console.error(`Host ${uid}: Transaction failed:`, error);
+        });
+    }, 2000);
+}
+
+function stopHostLogic() {
+    if (hostInterval) {
+        clearInterval(hostInterval);
+        hostInterval = null;
+        console.log("Host interval cleared."); 
+    }
+    const user = auth.currentUser;
+    if (user) {
+        db.ref('game_host').once('value').then(snapshot => {
+            if (snapshot.val() === user.uid) {
+                db.ref('game_host').remove()
+                    .then(() => console.log(`Host ${user.uid} gracefully resigned.`))
+                    .catch(error => console.error(`Error resigning host status for ${user.uid}:`, error));
+            }
+        });
+    }
+}
+
+function processLotteryBets(duration, periodId, gameResult) {
+    console.log(`Processing bets for period ${periodId} (duration ${duration}s) with result:`, gameResult); 
+
+    if (!currentUserData || !currentUserData.lotteryState) {
+        console.warn("currentUserData or lotteryState is missing, cannot process bets.");
+        return;
+    }
+    
+    if (!currentUserData.lotteryState[duration]) {
+        currentUserData.lotteryState[duration] = { myHistory: [], activeBets: {}, myPage: 1, gamePage: 1 };
+    }
+    if (!currentUserData.lotteryState[duration].activeBets) {
+        currentUserData.lotteryState[duration].activeBets = {};
+    }
+    if (!currentUserData.lotteryState[duration].myHistory) {
+        currentUserData.lotteryState[duration].myHistory = [];
+    }
+
+    const myBetsArray = Object.values(currentUserData.lotteryState[duration].activeBets);
+    const betsToProcess = myBetsArray.filter(bet => bet.period === periodId);
+
+    if (betsToProcess.length === 0) {
+        console.log("No active bets for this user in period", periodId); 
+        for (const key in currentUserData.lotteryState[duration].activeBets) {
+            if (currentUserData.lotteryState[duration].activeBets[key].period === periodId) {
+                delete currentUserData.lotteryState[duration].activeBets[key];
+            }
+        }
+        saveUserData(); 
+        return;
+    }
+
+    let totalWinnings = 0;
+    let anyWin = false; 
+
+    betsToProcess.forEach(bet => {
+        let win = false;
+        let payoutMultiplier = 0;
+
+        if (bet.type === 'color') {
+            if (bet.value === 'Green' && (gameResult.number === 1 || gameResult.number === 3 || gameResult.number === 7 || gameResult.number === 9)) {
+                win = true; payoutMultiplier = 2;
+            } else if (bet.value === 'Green' && gameResult.number === 5) { 
+                win = true; payoutMultiplier = 1.5;
+            } else if (bet.value === 'Red' && (gameResult.number === 2 || gameResult.number === 4 || gameResult.number === 6 || gameResult.number === 8)) {
+                win = true; payoutMultiplier = 2;
+            } else if (bet.value === 'Red' && gameResult.number === 0) { 
+                win = true; payoutMultiplier = 1.5;
+            } else if (bet.value === 'Violet' && (gameResult.number === 0 || gameResult.number === 5)) {
+                win = true; payoutMultiplier = 4.5;
+            }
+        } else if (bet.type === 'number') {
+            if (parseInt(bet.value) === gameResult.number) {
+                win = true; payoutMultiplier = 9;
+            }
+        } else if (bet.type === 'size') {
+            if ((gameResult.number !== 0 && gameResult.number !== 5)) {
+                if (bet.value === 'Big' && gameResult.size === 'Big') {
+                    win = true; payoutMultiplier = 2;
+                } else if (bet.value === 'Small' && gameResult.size === 'Small') {
+                    win = true; payoutMultiplier = 2;
+                }
+            }
+        }
+
+        const winnings = win ? bet.amount * payoutMultiplier : 0;
+        totalWinnings += winnings;
+        if (win) anyWin = true;
+
+        currentUserData.lotteryState[duration].myHistory.unshift({
+            period: periodId,
+            value: bet.value,
+            amount: bet.amount, 
+            payout: winnings,
+            win: win,
+            resultColor: gameResult.color,
+            resultNumber: gameResult.number,
+            resultSize: gameResult.size,
+            date: new Date().toLocaleString()
+        });
+        if (currentUserData.lotteryState[duration].myHistory.length > 50) {
+            currentUserData.lotteryState[duration].myHistory.pop();
+        }
+        console.log(`Bet on ${bet.value} (amount: ${bet.amount}) for period ${periodId}. Result: ${gameResult.number} ${gameResult.color} ${gameResult.size}. Win: ${win}, Payout: ${winnings.toFixed(2)}`); 
+    });
+
+    for (const key in currentUserData.lotteryState[duration].activeBets) {
+        if (currentUserData.lotteryState[duration].activeBets[key].period === periodId) {
+            delete currentUserData.lotteryState[duration].activeBets[key];
+        }
+    }
+
+    if (totalWinnings > 0) {
+        updateWallet(totalWinnings); 
+        showLotteryWinPopup(gameResult, totalWinnings);
+    } else if (betsToProcess.length > 0 && !anyWin) { 
+        showLotteryLossPopup(gameResult);
+    }
+    saveUserData(); 
+    console.log(`Finished processing bets for period ${periodId}. Total winnings: ${totalWinnings.toFixed(2)}`); 
+}
+
+function logout() {
+    playSound(clickSound);
+    console.log("Attempting logout..."); 
+    auth.signOut().catch(error => { console.error("Logout Error:", error); });
+}
+
+// --- FIREBASE AUTH & GLOBAL STATE LISTENER ---
+let initialAuthProcessed = false; 
+
+auth.onAuthStateChanged(user => {
+    console.log("Auth state changed. User:", user ? user.uid : "null"); 
+    if (user) {
+        document.getElementById('auth-wrapper').style.display = 'none'; 
+        document.getElementById('loadingOverlay').style.display = 'flex'; 
+
+        if (!initialAuthProcessed) {
+            console.log("Initial auth processing: User detected, starting app initialization.");
+            
+            if (dbListener) { db.ref('users/' + user.uid).off('value', dbListener); console.log("Old dbListener removed.");}
+            if (globalListener) { db.ref('game_state').off('value', globalListener); console.log("Old globalListener removed.");}
+
+            db.ref('users/' + user.uid).once('value')
+                .then(snapshot => {
+                    let userData = snapshot.val();
+                    if (!userData) {
+                        console.warn("No user data found in DB, creating default profile.");
+                        const mobile = user.email.split('@')[0];
+                        const uid = Math.floor(100000000 + Math.random() * 900000000);
+                        userData = {
+                            uid: uid, mobile: mobile, profileName: 'user' + mobile.slice(-6), wallet: 20.00,
+                            hasDeposited: false, hideDepositBonus: false,
+                            depositHistory: {}, withdrawalHistory: {}, lotteryState: {}, minesState: {}, lastBonusClaimDate: null, usedUTRs: {}, invites: {}, registrationDate: new Date().toISOString()
+                        };
+                        return db.ref('users/' + user.uid).set(userData).then(() => {
+                            console.log("Default user data created and set in DB.");
+                            return userData;
+                        }); 
+                    }
+                    console.log("Existing user data loaded:", userData);
+                    return userData;
+                })
+                .then((loadedUserData) => {
+                    console.log("Loaded user data for initializeApp:", loadedUserData);
+                    
+                    try {
+                        initializeApp(user, loadedUserData); 
+                    } catch (e) {
+                        console.error("Error during initializeApp call:", e);
+                        throw new Error("Initialization failed after loading user data.");
+                    }
+
+                    dbListener = db.ref('users/' + user.uid).on('value', (snapshot) => {
+                        const updatedData = snapshot.val();
+                        if (updatedData) {
+                            currentUserData = updatedData;
+                            updateAllWalletDisplays();
+                        } else {
+                            console.warn("User data snapshot is null for active user, forcing logout."); 
+                            auth.signOut(); 
+                        }
+                    });
+                    console.log("Real-time DB listener set.");
+
+                    globalListener = db.ref('game_state').on('value', snapshot => {
+                        const newData = snapshot.val() || {};
+                        console.log("globalListener: RECEIVED NEW DATA:", newData); 
+                        if (JSON.stringify(globalGameState) !== JSON.stringify(newData)) {
+                            console.log("globalListener: Data changed, updating UI."); 
+                            globalGameState = newData;
+                            if (currentActiveTabId === 'lottery') {
+                                updateRecordsUI(currentDuration);
+                            }
+                        } else {
+                            console.log("globalListener: Data identical, no UI update."); 
+                        }
+                    });
+                    console.log("Global game state listener set.");
+
+                    try {
+                        startHostLogic(user.uid);
+                    } catch (e) {
+                        console.error("Error during startHostLogic call:", e);
+                        throw new Error("Host logic failed to start.");
+                    }
+
+                    initialAuthProcessed = true; 
+                    console.log("App initialization complete for user:", user.uid);
+                })
+                .catch(error => {
+                    console.error("Critical Error during app initialization flow:", error); 
+                    showPopup("Error loading your profile. Please try logging in again.", "error");
+                    auth.signOut(); 
+                });
+        } else {
+            console.log("Auth state changed: User already processed, ensuring app is visible.");
+            document.getElementById('loadingOverlay').style.display = 'none';
+            document.getElementById('app-wrapper').style.display = 'flex';
+            updateAllWalletDisplays(); 
+        }
+
+    } else {
+        console.log("Auth state changed: User is null (logged out or no session)."); 
+        document.getElementById('app-wrapper').style.display = 'none';
+        document.getElementById('auth-wrapper').style.display = 'flex';
+        document.getElementById('loginError').textContent = ''; 
+        document.getElementById('registerError').textContent = ''; 
+        
+        if (dbListener) { 
+             if(auth.currentUser) db.ref('users/' + auth.currentUser.uid).off('value', dbListener);
+             dbListener = null;
+             console.log("User data listener removed on logout.");
+        }
+        if (globalListener) {
+            db.ref('game_state').off('value', globalListener);
+            globalListener = null;
+            console.log("Global game state listener removed on logout.");
+        }
+        stopHostLogic();
+        initialAuthProcessed = false; 
+        currentUserData = {};
+        console.log("App state reset for logout.");
+    }
+});
+</script>
+</body>
+</html>
