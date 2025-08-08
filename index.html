@@ -386,7 +386,7 @@
       <div class="form-group"><input type="tel" id="regMobile" placeholder="Mobile Number" maxlength="10"></div>
       <div class="form-group"><input type="password" id="regPassword" placeholder="New Password"></div>
       <div class="form-group"><input type="password" id="regConfirm" placeholder="Confirm Password"></div>
-      <div class="form-group"><input type="text" id="regRefer" placeholder="Refer Code (optional)"></div>
+      <div class="form-group"><input type="text" id="regRefer" placeholder="ReferCode GET₹20 (optional)"></div>
       <div class="error" id="registerError"></div>
       <button class="btn" onclick="handleRegister()">Sign Up</button>
     </div>
@@ -550,7 +550,7 @@
           <h2>🎁 Refer & Earn</h2>
           <div class="refer-box">
             <p>Invite friends and earn commission on their deposits!</p>
-            <p class="refer-link" id="referLink">https://aayush12365.github.io/GURU-WIN/123456</p>
+            <p class="refer-link" id="referLink">https://aayush12365.github.io/GURU-WIN/</p>
             <div class="btns">
               <button class="btn" onclick="copyLink()">Copy</button>
               <button class="btn" onclick="shareLink()">Share</button>
@@ -683,11 +683,11 @@
           <div class="rules-header">How to Play Win Go</div>
           <div class="rules-body">
               <p>A new round starts every 30/60/180 seconds. Place your bet within the countdown. Results are based on a random number from 0-9.</p>
-              <p><span>Green:</span> If the result is 1, 3, 7, or 9, you win (x2). If it's 5 (Green+Violet), you win (x1.5).</p>
-              <p><span>Red:</span> If the result is 2, 4, 6, or 8, you win (x2). If it's 0 (Red+Violet), you win (x1.5).</p>
+              <p><span>Green:</span> If the result is 1, 3, 7, or 9, you win (x1.9). If it's 5 (Green+Violet), you win (x1.5).</p>
+              <p><span>Red:</span> If the result is 2, 4, 6, or 8, you win (x1.9). If it's 0 (Red+Violet), you win (x1.5).</p>
               <p><span>Violet:</span> If the result is 0 or 5, you win (x4.5).</p>
               <p><span>Number:</span> If you bet on the correct number, you win (x9).</p>
-              <p><span>Size (Big/Small):</span> If the result is not Violet (0 or 5), you win (x2).</p>
+              <p><span>Size (Big/Small):</span> If the result is not Violet (0 or 5), you win (x1.9).</p>
           </div>
           <div class="rules-footer"><button id="rules-close-btn">Close</button></div>
       </div>
@@ -760,7 +760,7 @@
       </a>
       <div class="upi">9516103483@cnrb</div><div class="name">AYUSH RAJPUT</div>
       <button class="copy-btn" onclick="copyUPI()">Copy UPI ID</button><br>
-      <input type="number" id="depositAmount" placeholder="Enter Amount (Min ₹20)" />
+      <input type="number" id="depositAmount" placeholder="Enter Amount (Min ₹50)" />
       <input type="text" id="depositUtr" placeholder="Enter 12-digit UTR/Reference No." />
       <br><button class="submit-btn" onclick="submitDeposit()">Submit</button>
     </div>
@@ -772,7 +772,7 @@
       <div class="field-label">Full Name</div><input type="text" id="withdrawName" placeholder="Enter Your Name" />
       <div class="field-label">Mobile Number</div><input type="tel" id="withdrawMobile" placeholder="Enter Mobile Number" maxlength="10" />
       <div class="field-label">UPI ID</div><input type="text" id="withdrawUpi" placeholder="Enter your UPI ID" />
-      <div class="field-label">Amount (Min ₹20)</div><input type="number" id="withdrawAmount" placeholder="Enter Amount" />
+      <div class="field-label">Amount (Min ₹110)</div><input type="number" id="withdrawAmount" placeholder="Enter Amount" />
       <button class="submit-btn" onclick="submitWithdrawal()">Submit</button>
     </div>
   </div>
@@ -932,7 +932,7 @@ function initializeApp(user, data) {
     document.querySelector('.profile-name').textContent = data.profileName || 'user' + data.mobile.slice(-6);
     document.querySelector('.profile-uid').textContent = 'UID: ' + data.uid;
     document.querySelector('#profile .info-box .info-row span').textContent = '+91 ' + data.mobile;
-    document.getElementById('referLink').textContent = `https://guruwin.com/ref/${data.uid}`;
+    document.getElementById('referLink').textContent = `https://aayush12365.github.io/GURU-WIN/${data.uid}`;
     
     try {
         startLotteryGame();
@@ -1175,7 +1175,7 @@ function submitDeposit() {
     const amount = parseFloat(document.getElementById("depositAmount").value.trim());
     const utr = document.getElementById("depositUtr").value.trim();
     
-    if (isNaN(amount) || amount < 20) { showPopup("Minimum deposit is ₹20.", "error"); return; }
+    if (isNaN(amount) || amount < ₹50) { showPopup("Minimum deposit is ₹50.", "error"); return; }
     if (!utr || utr.length !== 12) { showPopup("Please enter a valid 12-digit UTR.", "error"); return; }
     
     if (!currentUserData.usedUTRs) currentUserData.usedUTRs = [];
@@ -1239,7 +1239,7 @@ function submitWithdrawal() {
     const withdrawMobile = document.getElementById("withdrawMobile").value.trim();
     const withdrawUpi = document.getElementById("withdrawUpi").value.trim();
 
-    if (isNaN(amount) || amount < 20) { showPopup("Minimum withdrawal is ₹20.", "error"); return; }
+    if (isNaN(amount) || amount < 110) { showPopup("Minimum withdrawal is ₹110.", "error"); return; }
     if (amount > currentUserData.wallet) { showPopup("Insufficient balance.", "error"); return; }
     if (!withdrawName || !withdrawMobile || !withdrawUpi) { showPopup("Please fill all withdrawal details.", "error"); return; }
     if (withdrawMobile.length !== 10 || isNaN(withdrawMobile)) { showPopup("Please enter a valid 10-digit mobile number for withdrawal.", "error"); return; }
