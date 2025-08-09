@@ -1767,34 +1767,14 @@ function copyLink() {
 }
 
 function shareLink() { 
-    playSound(clickSound); // Optional click sound
-
-    // Get UID dynamically (replace with your game's UID variable if needed)
-    const userUID = "12345678";
-
-    // Link with referral code parameter
-    const link = https://yourlink.com/?ref=${userUID};
-
-    // Share message
-    const shareText = 
-`🚀 Double your rewards!
+    playSound(clickSound); 
+    const link = document.getElementById('referLink').innerText; 
+    if (navigator.share) { 
+        navigator.share({ title: 'Join GURU WIN', text: '🚀 Double your rewards!
 Join using my special link to get your bonus 🎁
 Use my Referral Code and get ₹20 EXTRA instantly! 💸
-
-🔑 Referral Code: ${userUID}
-🔗 Join Link: ${link}
-
-⏳ Hurry! This offer won’t last long.`; 
-
-    // Share if supported
-    if (navigator.share) { 
-        navigator.share({ 
-            title: 'Join GURU WIN', 
-            text: shareText, 
-            url: link
-        })
-        .then(() => console.log('Share successful'))
-        .catch(error => console.error('Error sharing:', error)); 
+', url: link })
+            .catch(error => console.error('Error sharing:', error)); 
     } else { 
         showPopup("Sharing not supported on this device.", "error"); 
     } 
