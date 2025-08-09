@@ -63,11 +63,11 @@
         .tab-content { display: none; width: 100%; }
         .tab-content.active { display: block; }
         .bottom-nav { background: #fff; position: sticky; bottom: 0; width: 100%; display: flex; justify-content: space-around; border-top: 1px solid #e0e0e0; z-index: 20; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); flex-shrink: 0;}
-        .bottom-nav div { flex: 1; padding: 12px 0; text-align: center; color: #888; font-size: 13px; cursor: pointer; display: flex; flex-direction: column; align-items: center; transition: color 0.2s; }
-        .bottom-nav div::before { content: ''; font-size: 22px; margin-bottom: 3px; }
+        .bottom-nav div { flex: 1; padding: 6px 0; text-align: center; color: #000000; font-size: 12px; cursor: pointer; display: flex; flex-direction: column; align-items: center; transition: color 0.2s; }
+        .bottom-nav div::before { content: ''; font-size: 16px; margin-bottom: 2px; }
         .bottom-nav {
     position: fixed;
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 10px); /* safe area + extra space */
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 0px); /* safe area + extra space */
     width: 100%;
     display: flex;
     justify-content: space-around;
@@ -698,7 +698,7 @@
               <p><span>Red:</span> If the result is 2, 4, 6, or 8, you win (x1.9). If it's 0 (Red+Violet), you win (x1.5).</p>
               <p><span>Violet:</span> If the result is 0 or 5, you win (x4.5).</p>
               <p><span>Number:</span> If you bet on the correct number, you win (x9).</p>
-              <p><span>Size (Big/Small):</span> If the result is not Violet (0 or 5), you win (x2).</p>
+              <p><span>Size (Big/Small):</span> If the result is not Violet (0 or 5), you win (x1.9).</p>
           </div>
           <div class="rules-footer"><button id="rules-close-btn">Close</button></div>
       </div>
@@ -765,9 +765,9 @@
   <div class="overlay-page form-overlay" id="depositOverlayPage">
     <div class="overlay-header"><div class="overlay-back-button" onclick="closeOverlay('deposit')">←</div><h2>Deposit</h2></div>
     <div class="overlay-container deposit-container">
-      <div class="download-text">⬇️ Click QR to Download or Copy UPI</div>
-      <a id="qrDownload" href="https://ik.imagekit.io/9jxdbc3z2/IMG_20250713_232502.png?updatedAt=1752429661731" download="upi_qr.png">
-        <img src="https://ik.imagekit.co/9jxdbc3z2/IMG_20250713_232502.png?updatedAt=1752429661731" alt="QR" class="qr-img"/>
+      <div class="download-text">Click QR to Download or Copy UPI</div>
+      <a id="qrDownload" href="https://ik.imagekit.io/9jxdbc3z2/IMG_20250809_155924.png?updatedAt=1754735393465" download="upi_qr.png">
+        <img src="https://ik.imagekit.io/9jxdbc3z2/IMG_20250809_155924.png?updatedAt=1754735393465" alt="QR" class="qr-img"/>
       </a>
       <div class="upi">9516103483@cnrb</div><div class="name">AYUSH RAJPUT</div>
       <button class="copy-btn" onclick="copyUPI()">Copy UPI ID</button><br>
