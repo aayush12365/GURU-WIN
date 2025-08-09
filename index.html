@@ -20,40 +20,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: var(--light-bg); color: var(--text-dark); height: 100vh; max-height: 100vh; overflow: hidden; overscroll-behavior-y: contain; }
 
-        /* --- AUTHENTICATION PAGE STYLES --- */
-        #auth-wrapper { background: linear-gradient(160deg, #6D0000, #A30000, #D90429); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; position: relative; }
-        .auth-header {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: var(--theme-red);
-            padding: 15px;
-            color: var(--text-light);
-            font-size: 20px;
-            z-index: 21;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-        .auth-header-icon {
-            padding-right: 10px;
-            cursor: pointer;
-        }
-        #auth-container { background: rgba(0, 0, 0, 0.5); padding: 25px 20px; border-radius: 15px; width: 100%; max-width: 360px; border: 1px solid var(--theme-yellow); box-shadow: 0 0 20px rgba(255, 193, 7, 0.5); animation: fadeIn 0.8s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        #auth-container h2 { text-align: center; margin-bottom: 20px; font-weight: 700; color: var(--theme-yellow); letter-spacing: 1px; }
-        #auth-container .form-group { margin-bottom: 15px; }
-        #auth-container input { width: 100%; padding: 12px; background: #222; border: 1px solid var(--theme-yellow); color: var(--theme-yellow); border-radius: 8px; font-size: 15px; transition: 0.2s; }
-        #auth-container input:focus { outline: none; background: #111; box-shadow: 0 0 8px var(--theme-yellow); }
-        #auth-container input::placeholder { color: #888; }
-        #auth-container .btn { background: linear-gradient(135deg, var(--theme-yellow), var(--theme-red)); color: var(--text-dark); padding: 12px; border: none; width: 100%; font-weight: bold; border-radius: 8px; font-size: 16px; cursor: pointer; transition: opacity 0.3s; }
-        #auth-container .btn:hover{ opacity: 0.9; }
-        #auth-container .error { text-align: center; color: #ff8a80; font-size: 13px; margin-bottom: 12px; min-height: 15px; }
-        #auth-container .toggle-link { text-align: center; margin-top: 20px; font-size: 14px; color: #ccc; }
-        #auth-container .toggle-link a { color: var(--theme-yellow); text-decoration: none; font-weight: bold; margin-left: 5px; }
-
         /* --- MAIN APP STYLES --- */
         #app-wrapper { display: none; flex-direction: column; height: 100vh; max-height: 100vh; background: var(--light-bg); color: var(--text-dark); }
         .header { background: var(--theme-red); padding: 15px; text-align: center; position: sticky; top: 0; width: 100%; z-index: 20; display: flex; justify-content: space-between; align-items: center; color: var(--text-light); box-shadow: 0 2px 10px rgba(0,0,0,0.2); flex-shrink: 0; }
@@ -62,21 +28,9 @@
         .tab-container { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; align-items: center; z-index: 10; padding-bottom: 15px;}
         .tab-content { display: none; width: 100%; }
         .tab-content.active { display: block; }
-        .bottom-nav { background: #fff; position: sticky; bottom: 0; width: 100%; display: flex; justify-content: space-around; border-top: 1px solid #e0e0e0; z-index: 20; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); flex-shrink: 0;}
+        .bottom-nav { flex-shrink: 0; background: #fff; position: fixed; bottom: calc(env(safe-area-inset-bottom, 0px) + 0px); width: 100%; display: flex; justify-content: space-around; border-top: 1px solid #e0e0e0; z-index: 20; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); padding-bottom: env(safe-area-inset-bottom, 0px); }
         .bottom-nav div { flex: 1; padding: 6px 0; text-align: center; color: #000000; font-size: 12px; cursor: pointer; display: flex; flex-direction: column; align-items: center; transition: color 0.2s; }
         .bottom-nav div::before { content: ''; font-size: 16px; margin-bottom: 2px; }
-        .bottom-nav {
-    position: fixed;
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 0px); /* safe area + extra space */
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    border-top: 1px solid #e0e0e0;
-    z-index: 20;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-    background: #fff; /* ya apna background color */
-    padding-bottom: env(safe-area-inset-bottom, 0px); /* extra padding for iOS/Android gesture bar */
-}
         .bottom-nav div:nth-child(1)::before { content: '🎲'; } .bottom-nav div:nth-child(2)::before { content: '💣'; }
         .bottom-nav div:nth-child(3)::before { content: '🎁'; } .bottom-nav div:nth-child(4)::before { content: '👤'; }
         .bottom-nav .active { color: var(--theme-red); font-weight: bold; }
@@ -382,33 +336,636 @@
         #lose-popup-new .close-popup-btn { margin-top: 20px; }
         @keyframes particle-float { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-100vh); opacity: 0; } }
         @keyframes particle-fall { 0% { transform: translateY(0); opacity: 0.7; } 100% { transform: translateY(100vh); opacity: 0; } }
+
+        /* --- NEW AUTHENTICATION PAGE STYLES (from RajaLuck) --- */
+        #auth-wrapper {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #ff7b7b 0%, #ff9999 50%, #ffb3b3 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            display: flex; /* Ensure it's a flex container */
+            flex-direction: column; /* Allow content to stack */
+        }
+        .container-rajaluck {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Background decoration */
+        .bg-decoration {
+            position: absolute;
+            right: -50px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 300px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.1);
+            z-index: 0;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        /* Header */
+        .header-rajaluck {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .language-selector {
+            display: flex;
+            align-items: center;
+            color: white;
+            font-size: 16px;
+            gap: 8px;
+        }
+
+        .flag {
+            width: 24px;
+            height: 16px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30"><rect width="60" height="30" fill="%23B22234"/><path d="M0,0h60v2.31H0V0z M0,4.62h60v2.31H0V4.62z M0,9.23h60v2.31H0V9.23z M0,13.85h60v2.31H0V13.85z M0,18.46h60v2.31H0V18.46z M0,23.08h60v2.31H0V23.08z M0,27.69h60V30H0V27.69z" fill="%23FFFFFF"/><rect width="24" height="16.15" fill="%23002868"/></svg>') no-repeat center;
+            background-size: cover;
+            border-radius: 2px;
+        }
+
+        /* Main content */
+        .main-content-rajaluck {
+            flex: 1;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .brand-rajaluck {
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 40px;
+        }
+
+        .page-title {
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 16px;
+            margin-bottom: 40px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* Form container */
+        .form-container-rajaluck {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px 25px 0 0;
+            padding: 30px 20px;
+            min-height: 60vh;
+            position: relative;
+        }
+
+        /* Hide/Show forms */
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        /* Form groups */
+        .form-group-rajaluck {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            color: #666;
+            font-size: 16px;
+        }
+
+        .form-icon {
+            width: 20px;
+            height: 20px;
+            background: #ff7b7b;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        /* Phone input */
+        .phone-input {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .country-code {
+            padding: 15px;
+            background: #f8f9fa;
+            border: none;
+            color: #666;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .phone-number {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .phone-number::placeholder {
+            color: #999;
+        }
+
+        /* Regular inputs */
+        .form-input-rajaluck {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            background: #f8f9fa;
+            color: #333;
+            position: relative;
+        }
+
+        .form-input-rajaluck::placeholder {
+            color: #999;
+        }
+
+        .form-input-rajaluck:focus {
+            outline: none;
+            border-color: #ff7b7b;
+            background: white;
+        }
+
+        /* Password input container */
+        .password-container {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        /* Validation messages */
+        .validation-message {
+            color: #ff4757;
+            font-size: 12px;
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+
+        .password-requirements {
+            color: #ff4757;
+            font-size: 12px;
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+
+        /* Checkbox */
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .checkbox {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+        }
+
+        .checkbox-label {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.4;
+            cursor: pointer;
+        }
+
+        .privacy-link {
+            color: #ff7b7b;
+            text-decoration: none;
+        }
+
+        .privacy-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Buttons */
+        .btn-rajaluck {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary-rajaluck {
+            background: linear-gradient(135deg, #ff7b7b, #ff6b6b);
+            color: white;
+        }
+
+        .btn-primary-rajaluck:hover {
+            background: linear-gradient(135deg, #ff6b6b, #ff5b5b);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary-rajaluck {
+            background: white;
+            color: #ff7b7b;
+            border: 2px solid #ff7b7b;
+        }
+
+        .btn-secondary-rajaluck:hover {
+            background: #ff7b7b;
+            color: white;
+        }
+
+        .btn-rajaluck:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Footer links */
+        .footer-links {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .footer-link {
+            color: #999;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .footer-link:hover {
+            color: #ff7b7b;
+            text-decoration: underline;
+        }
+
+        /* Chat button */
+        .chat-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #ff7b7b;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(255, 123, 123, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .chat-btn:hover {
+            background: #ff6b6b;
+            transform: scale(1.1);
+        }
+
+        /* Success/Error messages */
+        .message-rajaluck {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            text-align: center;
+            display: none;
+        }
+
+        .message-rajaluck.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message-rajaluck.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Loading state */
+        .btn-rajaluck.loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .btn-rajaluck.loading::after {
+            content: '';
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        /* Responsive design for RajaLuck auth */
+        @media (max-width: 480px) {
+            .header-rajaluck {
+                padding: 15px;
+            }
+            
+            .main-content-rajaluck {
+                padding: 0 15px;
+            }
+            
+            .brand-rajaluck {
+                font-size: 28px;
+                margin-bottom: 30px;
+            }
+            
+            .page-title {
+                font-size: 20px;
+            }
+            
+            .form-container-rajaluck {
+                padding: 25px 15px;
+                border-radius: 20px 20px 0 0;
+            }
+            
+            .bg-decoration {
+                font-size: 200px;
+                right: -30px;
+            }
+            
+            .chat-btn {
+                width: 50px;
+                height: 50px;
+                bottom: 20px;
+                right: 20px;
+                font-size: 20px;
+            }
+        }
     </style>
 </head>
 <body>
 
-<!-- AUTHENTICATION WRAPPER -->
+<!-- AUTHENTICATION WRAPPER (New RajaLuck Design) -->
 <div id="auth-wrapper">
-  <div class="auth-header">
-      <div class="auth-header-icon" onclick="showOverlayWithLoading('customerSupport', true)">📞</div>
-  </div>
-  <div id="auth-container">
-    <h2 id="formTitle">Sign Up</h2>
-    <div id="signUpForm">
-      <div class="form-group"><input type="tel" id="regMobile" placeholder="Mobile Number" maxlength="10"></div>
-      <div class="form-group"><input type="password" id="regPassword" placeholder="New Password"></div>
-      <div class="form-group"><input type="password" id="regConfirm" placeholder="Confirm Password"></div>
-      <div class="form-group"><input type="text" id="regRefer" placeholder="Use ReferCode GET₹20"></div>
-      <div class="error" id="registerError"></div>
-      <button class="btn" onclick="handleRegister()">Sign Up</button>
+    <div class="container-rajaluck">
+        <!-- Background decoration -->
+        <div class="bg-decoration">R</div>
+        
+        <!-- Header -->
+        <div class="header-rajaluck">
+            <button class="back-btn" onclick="history.back()">
+                &#8249;
+            </button>
+            <div class="language-selector">
+                <div class="flag"></div>
+                <span>English</span>
+            </div>
+        </div>
+        
+        <!-- Main content -->
+        <div class="main-content-rajaluck" id="mainContentRajaluck">
+            <div class="brand-rajaluck">GURU WIN</div>
+            <div class="page-title" id="pageTitleRajaluck">Login to your account</div>
+            <div class="page-subtitle" id="pageSubtitleRajaluck" onclick="toggleForm()">no account?</div>
+        </div>
+        
+        <!-- Form container -->
+        <div class="form-container-rajaluck" id="formContainerRajaluck">
+            <div id="messageRajaluck" class="message-rajaluck"></div>
+            
+            <!-- Login Form -->
+            <div class="form-section active" id="loginFormRajaluck">
+                <form id="loginFormElement">
+                    <!-- Phone number input -->
+                    <div class="form-group-rajaluck">
+                        <div class="form-label">
+                            <div class="form-icon">📱</div>
+                            <span>log in via phone number</span>
+                        </div>
+                        <div class="phone-input">
+                            <select class="country-code" id="loginCountryCode">
+                                <option value="+91">+91</option>
+                            <input 
+                                type="tel" 
+                                class="phone-number" 
+                                id="loginPhoneNumber"
+                                placeholder="Please enter a phone number"
+                                maxlength="10"
+                                required
+                            >
+                        </div>
+                    </div>
+                    
+                    <!-- Password input -->
+                    <div class="form-group-rajaluck">
+                        <div class="form-label">
+                            <div class="form-icon">🔒</div>
+                            <span>password</span>
+                        </div>
+                        <div class="password-container">
+                            <input 
+                                type="password" 
+                                class="form-input-rajaluck" 
+                                id="loginPassword"
+                                placeholder="please enterpassword"
+                                required
+                            >
+                            <button type="button" class="password-toggle" onclick="togglePassword('loginPassword')">
+                                👁
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Remember password checkbox -->
+                    <div class="checkbox-group">
+                        <input type="checkbox" class="checkbox" id="rememberPassword">
+                        <label for="rememberPassword" class="checkbox-label">remember the password</label>
+                    </div>
+                    
+                    <!-- Login button -->
+                    <button type="submit" class="btn-rajaluck btn-primary-rajaluck" id="loginBtn">
+                        log in
+                    </button>
+                    
+                    <!-- Register button -->
+                    <button type="button" class="btn-rajaluck btn-secondary-rajaluck" onclick="toggleForm()">
+                        register now
+                    </button>
+                    
+                    <!-- Footer links -->
+                    <div class="footer-links">
+                        <a href="#" class="footer-link" onclick="alert('Password reset functionality will be available soon!')">forgot password?</a>
+                        <span class="footer-link">|</span>
+                        <a href="#" class="footer-link" onclick="alert('Customer service will be available soon!')">customer service</a>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Register Form -->
+            <div class="form-section" id="registerFormGURUWIN">
+                <form id="registerFormElement">
+                    <!-- Phone number input -->
+                    <div class="form-group-GURUWIN">
+                        <div class="form-label">
+                            <div class="form-icon">📱</div>
+                            <span>log in via phone number</span>
+                        </div>
+                        <div class="phone-input">
+                            <select class="country-code" id="registerCountryCode">
+      
+                            <input 
+                                type="tel" 
+                                class="phone-number" 
+                                id="registerPhoneNumber"
+                                placeholder="Please enter a phone number"
+                                maxlength="10"
+                                required
+                            >
+                        </div>
+                        <div class="validation-message" id="phoneValidation">
+                        </div>
+                    </div>
+                    
+                    <!-- Password input -->
+                    <div class="form-group-rajaluck">
+                        <div class="form-label">
+                            <div class="form-icon">🔒</div>
+                            <span>set a password</span>
+                        </div>
+                        <div class="password-container">
+                            <input 
+                                type="password" 
+                                class="form-input-GURUWIN" 
+                                id="registerPassword"
+                                placeholder="please enter a password"
+                                required
+                            >
+                            <button type="button" class="password-toggle" onclick="togglePassword('registerPassword')">
+                                👁
+                            </button>
+                        </div>
+                        <div class="password-requirements" id="passwordRequirements">
+                        </div>
+                    </div>
+                    
+                    <!-- Confirm password input -->
+                    <div class="form-group-GURUWIN">
+                        <div class="form-label">
+                            <div class="form-icon">🔒</div>
+                            <span>Confirm password</span>
+                        </div>
+                        <div class="password-container">
+                            <input 
+                                type="password" 
+                                class="form-input-GURUWIN" 
+                                id="confirmPassword"
+                                placeholder="please enter Confirm password"
+                                required
+                            >
+                            <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')">
+                                👁
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Invitation code input -->
+                    <div class="form-group-rajaluck">
+                        <div class="form-label">
+                            <div class="form-icon">🎫</div>
+                            <span>Invitation Code (Optional)</span>
+                        </div>
+                        <input 
+                            type="text" 
+                            class="form-input-rajaluck" 
+                            id="invitationCode"
+                            placeholder="Please enter the invitation code"
+                            {{-- REMOVED 'required' ATTRIBUTE HERE --}}
+                        >
+                    </div>
+                    
+                    <!-- Privacy agreement checkbox -->
+                    <div class="checkbox-group">
+                        <input type="checkbox" class="checkbox" id="agreeToTerms" required>
+                        <label for="agreeToTerms" class="checkbox-label">
+                            I have read and agree <a href="#" class="privacy-link" onclick="showPrivacyPolicy()">Privacy Agreement</a>
+                        </label>
+                    </div>
+                    
+                    <!-- Register button -->
+                    <button type="submit" class="btn-rajaluck btn-primary-rajaluck" id="registerBtn">
+                        register
+                    </button>
+                    
+                    <!-- Login button -->
+                    <button type="button" class="btn-rajaluck btn-secondary-rajaluck" onclick="toggleForm()">
+                        log in
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Chat button -->
+        <button class="chat-btn" onclick="showOverlay('customerSupport', true)">
+            💬
+        </button>
     </div>
-    <div id="loginForm" style="display: none;">
-      <div class="form-group"><input type="tel" id="loginMobile" placeholder="Mobile Number" maxlength="10"></div>
-      <div class="form-group"><input type="password" id="loginPassword" placeholder="Password"></div>
-      <div class="error" id="loginError"></div>
-      <button class="btn" onclick="handleLogin()">Login</button>
-    </div>
-    <div class="toggle-link" id="toggleLink">Already have an account? <a href="#" onclick="toggleForm()">Login</a></div>
-  </div>
 </div>
 
 <!-- MAIN APP WRAPPER -->
@@ -617,7 +1174,7 @@
         </div>
         <div class="option-button-support" onclick="showOverlay('customerSupport')">Customer Support</div>
       </div>
-      <div class="logout-button-container"><button class="logout-btn" onclick="logout()">Logout</button></div>
+      <div class="logout-button-container"><button class="logout-btn" onclick="handleLogoutGuruWin()">Logout</button></div>
     </div>
   </div>
 
@@ -839,125 +1396,6 @@
 <!-- ========================================================================================= -->
 
 <script>
-// --- AUTHENTICATION & INITIALIZATION ---
-let isSignUp = true;
-let isFirstLogin = false; 
-
-function toggleForm() {
-    playSound(clickSound); 
-    isSignUp = !isSignUp;
-    document.getElementById('formTitle').textContent = isSignUp ? 'Sign Up' : 'Login';
-    document.getElementById('signUpForm').style.display = isSignUp ? 'block' : 'none';
-    document.getElementById('loginForm').style.display = isSignUp ? 'none' : 'block';
-    document.getElementById('toggleLink').innerHTML = isSignUp ? `Already have an account? <a href="#" onclick="toggleForm()">Login</a>` : `Don't have an account? <a href="#" onclick="toggleForm()">Sign Up</a>`;
-}
-const toEmail = mobile => `${mobile}@guruwin.app`;
-
-function handleLogin() {
-    playSound(clickSound);
-    const mobile = document.getElementById('loginMobile').value.trim();
-    const password = document.getElementById('loginPassword').value.trim();
-    const error = document.getElementById('loginError');
-    error.textContent = '';
-    if (!mobile || !password) { error.textContent = 'Please fill all fields'; return; }
-    if (mobile.length !== 10 || isNaN(mobile)) { error.textContent = 'Please enter a valid 10-digit mobile number.'; return; }
-    console.log("Attempting login for:", toEmail(mobile)); 
-    auth.signInWithEmailAndPassword(toEmail(mobile), password)
-        .then(userCredential => {
-            console.log("Login successful:", userCredential.user.uid); 
-        })
-        .catch(err => {
-            console.error("Login Error:", err); 
-            error.textContent = "Invalid mobile number or password.";
-        });
-}
-
-function handleRegister() {
-    playSound(clickSound);
-    const mobile = document.getElementById('regMobile').value.trim();
-    const password = document.getElementById('regPassword').value.trim();
-    const confirm = document.getElementById('regConfirm').value.trim();
-    const referCode = document.getElementById('regRefer').value.trim();
-    const error = document.getElementById('registerError');
-    error.textContent = '';
-
-    if (!mobile || !password || !confirm) { error.textContent = 'All fields except Refer Code are required'; return; }
-    if (mobile.length !== 10 || isNaN(mobile)) { error.textContent = 'Please enter a valid 10-digit mobile number.'; return; }
-    if (password.length < 6) { error.textContent = 'Password must be at least 6 characters long.'; return; }
-    if (password !== confirm) { error.textContent = 'Passwords do not match'; return; }
-    console.log("Attempting registration for:", toEmail(mobile)); 
-
-    auth.createUserWithEmailAndPassword(toEmail(mobile), password)
-        .then(userCredential => {
-            const user = userCredential.user;
-            const uid = Math.floor(100000000 + Math.random() * 900000000);
-            const initialUserData = {
-                uid: uid, mobile: mobile, profileName: 'user' + mobile.slice(-6), wallet: 28.00,
-                hasDeposited: false, hideDepositBonus: false,
-                depositHistory: {}, withdrawalHistory: {}, lotteryState: {}, minesState: {}, lastBonusClaimDate: null, usedUTRs: [], invites: {}, registrationDate: new Date().toISOString()
-            };
-            console.log("User registered, UID:", user.uid, "Initial data:", initialUserData); 
-
-            const userRef = db.ref('users/' + user.uid);
-            return userRef.set(initialUserData)
-                .then(() => {
-                    isFirstLogin = true; 
-                    if (referCode) {
-                        db.ref('users').orderByChild('uid').equalTo(parseInt(referCode)).once('value', snapshot => {
-                            if (snapshot.exists()) {
-                                const referrerKey = Object.keys(snapshot.val())[0];
-                                db.ref(`users/${referrerKey}/invites`).push({ 
-                                    uid: uid,
-                                    mobile: mobile,
-                                    date: new Date().toLocaleString(),
-                                    deposit: 0 
-                                });
-                                console.log(`User ${uid} invited by ${referCode}. Referrer's invites updated.`); 
-                            } else {
-                                console.warn(`Refer code ${referCode} not found.`);
-                            }
-                        });
-                    }
-                });
-        })
-        .catch(err => {
-            console.error("Register Error:", err); 
-            error.textContent = err.code === 'auth/email-already-in-use' ? 'This mobile number is already registered.' : err.message;
-        });
-}
-
-function showAppWithLoading() { 
-    document.getElementById('auth-wrapper').style.display = 'none'; 
-    document.getElementById('loadingOverlay').style.display = 'flex'; 
-    setTimeout(() => { 
-        document.getElementById('loadingOverlay').style.display = 'none'; 
-        document.getElementById('app-wrapper').style.display = 'flex'; 
-        console.log("App wrapper displayed."); 
-    }, 1000); 
-}
-
-function initializeApp(user, data) {
-    console.log("Initializing app for user:", user.uid, "with data:", data); 
-    currentUserData = data;
-    document.querySelector('.profile-icon').textContent = "GU";
-    document.querySelector('.profile-name').textContent = data.profileName || 'user' + data.mobile.slice(-6);
-    document.querySelector('.profile-uid').textContent = 'UID: ' + data.uid;
-    document.querySelector('#profile .info-box .info-row span').textContent = '+91 ' + data.mobile;
-    document.getElementById('referLink').textContent = `https://aayush12365.github.io/GURU-WIN/`; /* MODIFIED LINE: Removed data.uid */
-    
-    try {
-        startLotteryGame();
-        initializeMinesGame();
-    } catch (e) {
-        console.error("Error during game initialization:", e);
-        showPopup("Error initializing games. Please refresh.", "error");
-    }
-
-    switchTab('lottery'); 
-    updateAllWalletDisplays(); 
-    showAppWithLoading();
-}
-
 // --- GLOBAL APP LOGIC & UTILITIES ---
 let currentUserData = {}; 
 let dbListener = null; 
@@ -978,6 +1416,113 @@ const profileWalletBalanceElement = document.getElementById("profileWalletBalanc
 const lotteryBalanceElement = document.getElementById("lotteryBalance");
 const minesWalletElement = document.getElementById("minesWallet");
 const clickSound = document.getElementById('clickSound');
+
+// RajaLuck Specific Globals and Utilities
+let currentForm = 'login'; // 'login' or 'register'
+const invitationCodes = ['RAJA2024', 'LUCK123', 'WELCOME']; // Static invitation codes for client-side validation
+
+const messageRajaluck = document.getElementById('messageRajaluck');
+
+
+// Toggle password visibility for RajaLuck forms
+function togglePassword(inputId) {
+    const input = document.getElementById(inputId);
+    const button = input.nextElementSibling;
+    
+    if (input.type === 'password') {
+        input.type = 'text';
+        button.textContent = '🙈';
+    } else {
+        input.type = 'password';
+        button.textContent = '👁';
+    }
+}
+
+// Show message to user on RajaLuck forms
+function showMessageRajaluck(message, type = 'info') {
+    messageRajaluck.textContent = message;
+    messageRajaluck.className = `message-rajaluck ${type}`;
+    messageRajaluck.style.display = 'block';
+    
+    if (type === 'success') {
+        setTimeout(() => {
+            messageRajaluck.style.display = 'none';
+        }, 3000);
+    }
+}
+
+// Clear message on RajaLuck forms
+function clearMessageRajaluck() {
+    messageRajaluck.style.display = 'none';
+}
+
+// Format phone number for RajaLuck inputs
+function formatPhoneNumber(value) {
+    const digits = value.replace(/\D/g, '');
+    return digits.slice(0, 10);
+}
+
+// Validate phone number for RajaLuck forms
+function isValidPhoneNumber(phone) {
+    return /^[6-9]\d{9}$/.test(phone); // Indian mobile numbers usually start with 6, 7, 8, or 9
+}
+
+// Phone validation for Register form
+function validatePhone() {
+    const phoneNumberInput = document.getElementById('registerPhoneNumber');
+    const phoneNumber = phoneNumberInput.value;
+    const validation = document.getElementById('phoneValidation');
+    
+    if (phoneNumber && !isValidPhoneNumber(phoneNumber)) {
+        validation.style.display = 'block';
+        validation.style.color = '#ff4757';
+    } else {
+        validation.style.display = 'none';
+    }
+}
+
+// Password validation for Register form
+function validatePassword() {
+    const password = document.getElementById('registerPassword').value;
+    const requirements = document.getElementById('passwordRequirements');
+    
+    if (password) {
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasLowerCase = /[a-z]/.test(password);
+        const hasNumbers = /\d/.test(password);
+        const hasMinLength = password.length >= 8;
+        
+        if (hasUpperCase && hasLowerCase && hasNumbers && hasMinLength) {
+            requirements.style.color = '#28a745';
+            requirements.textContent = 'Password meets all requirements ✓';
+        } else {
+            requirements.style.color = '#ff4757';
+            requirements.textContent = 'Password must contain uppercase and lowercase letters A-Z and numbers 0-9 and have more than or equal to 8 digits';
+        }
+    } else {
+        // If password is empty, show original requirements or clear them
+        requirements.style.color = '#ff4757';
+        requirements.textContent = 'Password must contain uppercase and lowercase letters A-Z and numbers 0-9 and have more than or equal to 8 digits';
+    }
+}
+
+// Confirm password validation for Register form
+function validateConfirmPassword() {
+    const password = document.getElementById('registerPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    
+    if (confirmPassword && password !== confirmPassword) {
+        showMessageRajaluck('Passwords do not match', 'error');
+    } else {
+        clearMessageRajaluck();
+    }
+}
+
+// Show privacy policy
+function showPrivacyPolicy() {
+    alert('Privacy Agreement:\n\nThis is a demo application. In a real application, this would show the complete privacy policy and terms of service.\n\nBy using this application, you agree to our terms and conditions.');
+}
+
 
 // Generate unique period ID based on duration and current time
 const generatePeriodId = (duration, date = new Date()) => { 
@@ -1305,8 +1850,12 @@ function submitSupport(){
     const mobile = document.getElementById('mobile').value.trim();
     const message = document.getElementById('message').value.trim();
 
-    if ((!openedFromAuthPage && !uid) || !name || !mobile || !message) {
-        showPopup("Please fill all required fields to submit your query (UID is optional from login/signup).", "error");
+    // Check if the input fields exist before trying to get their values
+    const currentUID = currentUserData ? currentUserData.uid : 'N/A';
+    const formUID = document.getElementById('uid') ? document.getElementById('uid').value.trim() : '';
+
+    if (!name || !mobile || !message) {
+        showPopup("Please fill all required fields to submit your query.", "error");
         return;
     }
     if (mobile.length !== 10 || isNaN(mobile)) {
@@ -1318,7 +1867,7 @@ function submitSupport(){
     const ticketId = db.ref('supportTickets').push().key;
     const ticketData = {
         id: ticketId,
-        uid: uid || 'N/A',
+        uid: formUID || currentUID, // Use form UID if provided, else use current user's UID
         name: name,
         mobile: mobile,
         message: message,
@@ -1387,11 +1936,11 @@ function startLotteryGame() {
         const state = globalGameState[duration]; 
         if (!state) {
             console.warn(`updateRecordsUI: No state found for duration ${duration}`); 
-            ui.gameTbody.innerHTML = '<tr><td colspan="4">No game records available.</td></tr>';
-            ui.gamePagination.innerHTML = '';
-            ui.lastResultsContainer.innerHTML = '';
-            ui.myGameTbody.innerHTML = '<tr><td colspan="4">No personal records available.</td></tr>';
-            ui.myPagination.innerHTML = '';
+            if(ui.gameTbody) ui.gameTbody.innerHTML = '<tr><td colspan="4">No game records available.</td></tr>';
+            if(ui.gamePagination) ui.gamePagination.innerHTML = '';
+            if(ui.lastResultsContainer) ui.lastResultsContainer.innerHTML = '';
+            if(ui.myGameTbody) ui.myGameTbody.innerHTML = '<tr><td colspan="4">No personal records available.</td></tr>';
+            if(ui.myPagination) ui.myPagination.innerHTML = '';
             return;
         }
 
@@ -1407,14 +1956,14 @@ function startLotteryGame() {
         let gamePage = myState.gamePage || 1; 
         gamePage = Math.min(gamePage, gamePages); 
         myState.gamePage = gamePage; 
-        ui.gameTbody.innerHTML = gameHistory.slice((gamePage - 1) * itemsPerPage, gamePage * itemsPerPage).map(rec => { 
+        if(ui.gameTbody) ui.gameTbody.innerHTML = gameHistory.slice((gamePage - 1) * itemsPerPage, gamePage * itemsPerPage).map(rec => { 
             const numPillClass = rec.color === 'Red' ? 'pill-red' : (rec.color === 'Green' ? 'pill-green' : 'pill-violet'); 
             const textColorClass = rec.color === 'Red' ? 'r-color-red' : (rec.color === 'Green' ? 'r-color-green' : 'r-color-purple'); 
             return `<tr><td>${rec.period.slice(-4)}</td><td><span class="r-number ${numPillClass}">${rec.number}</span></td><td>${rec.size}</td><td class="r-color ${textColorClass}">${rec.color}</td></tr>`; 
         }).join(''); 
-        ui.gamePagination.innerHTML = `<button class="prev" ${gamePage === 1 ? 'disabled' : ''}>◀</button><span>${gamePage}/${gamePages}</span><button class="next" ${gamePage >= gamePages ? 'disabled' : ''}>▶</button>`; 
+        if(ui.gamePagination) ui.gamePagination.innerHTML = `<button class="prev" ${gamePage === 1 ? 'disabled' : ''}>◀</button><span>${gamePage}/${gamePages}</span><button class="next" ${gamePage >= gamePages ? 'disabled' : ''}>▶</button>`; 
         
-        ui.lastResultsContainer.innerHTML = gameHistory.slice(0, 5).map(rec => 
+        if(ui.lastResultsContainer) ui.lastResultsContainer.innerHTML = gameHistory.slice(0, 5).map(rec => 
             `<div class="result-pill ${rec.color === 'Red' ? 'pill-red' : (rec.color === 'Green' ? 'pill-green' : 'pill-violet')}">${rec.number}</div>`
         ).join(''); 
         console.log("Last results container updated with:", gameHistory.slice(0, 5)); 
@@ -1425,13 +1974,13 @@ function startLotteryGame() {
         let myPage = myState.myPage || 1; 
         myPage = Math.min(myPage, myPages); 
         myState.myPage = myPage; 
-        ui.myGameTbody.innerHTML = myHistory.length === 0 ? '<tr><td colspan="4">No personal records yet.</td></tr>' : myHistory.slice((myPage - 1) * itemsPerPage, myPage * itemsPerPage).map(rec => { 
+        if(ui.myGameTbody) ui.myGameTbody.innerHTML = myHistory.length === 0 ? '<tr><td colspan="4">No personal records yet.</td></tr>' : myHistory.slice((myPage - 1) * itemsPerPage, myPage * itemsPerPage).map(rec => { 
             const resultColorClass = rec.win ? 'r-color-green' : 'r-color-red'; 
             const resultText = rec.win ? 'Win' : 'Lose'; 
             const amountText = rec.win ? `+₹${rec.payout.toFixed(2)}` : `-₹${rec.amount.toFixed(2)}`; 
             return `<tr><td>${rec.period.slice(-4)}</td><td>${rec.value}</td><td class="${resultColorClass}">${resultText}</td><td class="${resultColorClass}">${amountText}</td></tr>`; 
         }).join(''); 
-        ui.myPagination.innerHTML = `<button class="prev" ${myPage === 1 ? 'disabled' : ''}>◀</button><span>${myPage}/${myPages}</span><button class="next" ${myPage >= myPages ? 'disabled' : ''}>▶</button>`; 
+        if(ui.myPagination) ui.myPagination.innerHTML = `<button class="prev" ${myPage === 1 ? 'disabled' : ''}>◀</button><span>${myPage}/${myPages}</span><button class="next" ${myPage >= myPages ? 'disabled' : ''}>▶</button>`; 
         saveUserData();
     };
     
@@ -1447,7 +1996,7 @@ function startLotteryGame() {
             const totalSecondsInDay = now.getUTCHours() * 3600 + now.getUTCMinutes() * 60 + now.getUTCSeconds();
             remainingSeconds = activeDuration - (totalSecondsInDay % activeDuration);
         } else {
-            const totalSecondsInDay = now.getUTCHours() * 3600 + now.getUTCMinutes() * 60 + now.getUTCSeconds();
+            const totalSecondsInDay = now.getUTCHours() * 3600 + now.getUTCMonths() * 60 + now.getUTCSeconds(); // Corrected getUTCMonths to getUTCMinutes
             remainingSeconds = activeDuration - (totalSecondsInDay % activeDuration);
             periodId = generatePeriodId(activeDuration, now); 
         }
@@ -1712,7 +2261,6 @@ function initializeMinesGame() {
             minesSelectedTiles = []; 
             minesGemsFound = 0; 
             minesCurrentMultiplier = 1.00; 
-            minesMultiplierEl.textContent = '1.00x'; 
             minesProfitEl.textContent = `₹0.00`; 
             minesCreateGrid(); 
             isMinesPlaying = true; 
@@ -1976,6 +2524,7 @@ function processLotteryBets(duration, periodId, gameResult) {
 
     if (betsToProcess.length === 0) {
         console.log("No active bets for this user in period", periodId); 
+        // Clean up processed bets from activeBets if any are still there due to edge cases
         for (const key in currentUserData.lotteryState[duration].activeBets) {
             if (currentUserData.lotteryState[duration].activeBets[key].period === periodId) {
                 delete currentUserData.lotteryState[duration].activeBets[key];
@@ -2055,11 +2604,220 @@ function processLotteryBets(duration, periodId, gameResult) {
     console.log(`Finished processing bets for period ${periodId}. Total winnings: ${totalWinnings.toFixed(2)}`); 
 }
 
-function logout() {
+function handleLogoutGuruWin() {
     playSound(clickSound);
     console.log("Attempting logout..."); 
     auth.signOut().catch(error => { console.error("Logout Error:", error); });
 }
+
+// --- AUTHENTICATION & INITIALIZATION ---
+const toEmail = mobile => `${mobile}@guruwin.app`;
+
+function initializeApp(user, data) {
+    console.log("Initializing app for user:", user.uid, "with data:", data); 
+    currentUserData = data;
+    document.querySelector('.profile-icon').textContent = "GU";
+    document.querySelector('.profile-name').textContent = data.profileName || 'user' + data.mobile.slice(-6);
+    document.querySelector('.profile-uid').textContent = 'UID: ' + data.uid;
+    document.querySelector('#profile .info-box .info-row span').textContent = '+91 ' + data.mobile;
+    document.getElementById('referLink').textContent = `https://aayush12365.github.io/GURU-WIN/`; 
+    
+    try {
+        startLotteryGame();
+        initializeMinesGame();
+    } catch (e) {
+        console.error("Error during game initialization:", e);
+        showPopup("Error initializing games. Please refresh.", "error");
+    }
+
+    switchTab('lottery'); 
+    updateAllWalletDisplays(); 
+    document.getElementById('loadingOverlay').style.display = 'none'; 
+    document.getElementById('app-wrapper').style.display = 'flex'; 
+    console.log("App wrapper displayed."); 
+}
+
+// Handle login for RajaLuck form
+async function handleLoginNew(e) {
+    e.preventDefault();
+    playSound(clickSound);
+    
+    const phoneNumber = document.getElementById('loginPhoneNumber').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+    const loginBtn = document.getElementById('loginBtn');
+    
+    clearMessageRajaluck();
+
+    if (!phoneNumber || !password) {
+        showMessageRajaluck('Please fill in all fields', 'error');
+        return;
+    }
+    
+    if (phoneNumber.length !== 10 || isNaN(phoneNumber)) {
+        showMessageRajaluck('Please enter a valid 10-digit mobile number.', 'error');
+        return;
+    }
+    
+    // Show loading state
+    loginBtn.classList.add('loading');
+    loginBtn.disabled = true;
+    loginBtn.textContent = 'Logging in...';
+    
+    auth.signInWithEmailAndPassword(toEmail(phoneNumber), password)
+        .then(userCredential => {
+            console.log("Login successful:", userCredential.user.uid); 
+            showMessageRajaluck('Login successful! Redirecting...', 'success');
+            // auth.onAuthStateChanged will handle the rest
+        })
+        .catch(err => {
+            console.error("Login Error:", err); 
+            let errorMessage = "Invalid mobile number or password.";
+            if (err.code === 'auth/user-not-found') {
+                errorMessage = "No account found with this mobile number.";
+            } else if (err.code === 'auth/wrong-password') {
+                errorMessage = "Incorrect password.";
+            }
+            showMessageRajaluck(errorMessage, 'error');
+        })
+        .finally(() => {
+            // Reset button state
+            loginBtn.classList.remove('loading');
+            loginBtn.disabled = false;
+            loginBtn.textContent = 'log in';
+        });
+}
+
+// Handle registration for RajaLuck form
+async function handleRegisterNew(e) {
+    e.preventDefault();
+    playSound(clickSound);
+    
+    const mobile = document.getElementById('registerPhoneNumber').value.trim();
+    const password = document.getElementById('registerPassword').value.trim();
+    const confirm = document.getElementById('confirmPassword').value.trim();
+    const referCode = document.getElementById('invitationCode').value.trim(); // This is now optional
+    const agreeToTerms = document.getElementById('agreeToTerms').checked;
+    const registerBtn = document.getElementById('registerBtn');
+    
+    clearMessageRajaluck();
+
+    // Client-side validation - Removed referCode from required check
+    if (!mobile || !password || !confirm) { 
+        showMessageRajaluck('Mobile, Password, and Confirm Password are required', 'error'); return; 
+    }
+    
+    if (mobile.length !== 10 || isNaN(mobile) || !isValidPhoneNumber(mobile)) { 
+        showMessageRajaluck('Please enter a valid 10-digit mobile number (cannot start with 0).', 'error'); return; 
+    }
+    
+    if (password.length < 8) { 
+        showMessageRajaluck('Password must be at least 8 characters long.', 'error'); return; 
+    }
+    
+    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) { 
+        showMessageRajaluck('Password must contain uppercase, lowercase letters, and numbers.', 'error'); return; 
+    }
+    
+    if (password !== confirm) { 
+        showMessageRajaluck('Passwords do not match.', 'error'); return; 
+    }
+    
+    // Validate invitation code ONLY if it's provided and not empty
+    if (referCode && referCode.length > 0 && !invitationCodes.includes(referCode)) { 
+        showMessageRajaluck('Invalid invitation code.', 'error'); return; 
+    }
+    
+    if (!agreeToTerms) { 
+        showMessageRajaluck('You must agree to the Privacy Agreement.', 'error'); return; 
+    }
+
+    // Show loading state
+    registerBtn.classList.add('loading');
+    registerBtn.disabled = true;
+    registerBtn.textContent = 'Registering...';
+
+    auth.createUserWithEmailAndPassword(toEmail(mobile), password)
+        .then(userCredential => {
+            const user = userCredential.user;
+            const uid = Math.floor(100000000 + Math.random() * 900000000);
+            const initialUserData = {
+                uid: uid, mobile: mobile, profileName: 'user' + mobile.slice(-6), wallet: 28.00,
+                hasDeposited: false, hideDepositBonus: false,
+                depositHistory: {}, withdrawalHistory: {}, lotteryState: {}, minesState: {}, lastBonusClaimDate: null, usedUTRs: [], invites: {}, registrationDate: new Date().toISOString()
+            };
+            console.log("User registered, UID:", user.uid, "Initial data:", initialUserData); 
+
+            const userRef = db.ref('users/' + user.uid);
+            return userRef.set(initialUserData)
+                .then(() => {
+                    if (referCode && referCode.length > 0) { // Only attempt to update referrer if code was provided
+                        db.ref('users').orderByChild('uid').equalTo(parseInt(referCode)).once('value', snapshot => { // Assuming referCode can be UID
+                            if (snapshot.exists()) {
+                                const referrerKey = Object.keys(snapshot.val())[0];
+                                db.ref(`users/${referrerKey}/invites`).push({ 
+                                    uid: uid,
+                                    mobile: mobile,
+                                    date: new Date().toLocaleString(),
+                                    deposit: 0 
+                                });
+                                console.log(`User ${uid} invited by ${referCode}. Referrer's invites updated.`); 
+                            } else {
+                                console.warn(`Refer code ${referCode} not found.`);
+                            }
+                        });
+                    }
+                    showMessageRajaluck('Registration successful! Redirecting...', 'success');
+                });
+        })
+        .catch(err => {
+            console.error("Register Error:", err); 
+            let errorMessage = err.code === 'auth/email-already-in-use' ? 'This mobile number is already registered.' : err.message;
+            showMessageRajaluck(errorMessage, 'error');
+        })
+        .finally(() => {
+            registerBtn.classList.remove('loading');
+            registerBtn.disabled = false;
+            registerBtn.textContent = 'register';
+        });
+}
+
+// Toggle between login and register forms
+function toggleForm() {
+    console.log("toggleForm called. Initial currentForm:", currentForm); // Debug log 1
+    playSound(clickSound);
+    
+    const loginForm = document.getElementById('loginFormRajaluck');
+    const registerForm = document.getElementById('registerFormRajaluck');
+    const pageTitle = document.getElementById('pageTitleRajaluck');
+    const pageSubtitle = document.getElementById('pageSubtitleRajaluck');
+
+    if (!loginForm || !registerForm || !pageTitle || !pageSubtitle) {
+        console.error("toggleForm: One or more required elements not found. Please check IDs."); // Debug log 2
+        return;
+    }
+
+    if (currentForm === 'login') {
+        loginForm.classList.remove('active');
+        registerForm.classList.add('active');
+        pageTitle.textContent = 'create your account';
+        pageSubtitle.textContent = 'i have account';
+        currentForm = 'register';
+        console.log("Switched to Register form. currentForm:", currentForm); // Debug log 3
+        console.log("loginForm active after switch:", loginForm.classList.contains('active')); 
+        console.log("registerForm active after switch:", registerForm.classList.contains('active')); 
+    } else {
+        registerForm.classList.remove('active');
+        loginForm.classList.add('active');
+        pageTitle.textContent = 'Login to your account';
+        pageSubtitle.textContent = 'no account?';
+        currentForm = 'login';
+        console.log("Switched to Login form. currentForm:", currentForm); // Debug log 4
+        console.log("loginForm active after switch:", loginForm.classList.contains('active')); 
+        console.log("registerForm active after switch:", registerForm.classList.contains('active')); 
+    }
+    clearMessageRajaluck();
+}
+
 
 // --- FIREBASE AUTH & GLOBAL STATE LISTENER ---
 let initialAuthProcessed = false; 
@@ -2158,9 +2916,8 @@ auth.onAuthStateChanged(user => {
     } else {
         console.log("Auth state changed: User is null (logged out or no session)."); 
         document.getElementById('app-wrapper').style.display = 'none';
-        document.getElementById('auth-wrapper').style.display = 'flex';
-        document.getElementById('loginError').textContent = ''; 
-        document.getElementById('registerError').textContent = ''; 
+        document.getElementById('auth-wrapper').style.display = 'flex'; // Show the new RajaLuck auth page
+        clearMessageRajaluck(); // Clear any messages on the auth page
         
         if (dbListener) { 
              if(auth.currentUser) db.ref('users/' + auth.currentUser.uid).off('value', dbListener);
@@ -2176,7 +2933,60 @@ auth.onAuthStateChanged(user => {
         initialAuthProcessed = false; 
         currentUserData = {};
         console.log("App state reset for logout.");
+
+        // Reset forms in the RajaLuck UI
+        const loginFormElement = document.getElementById('loginFormElement');
+        const registerFormElement = document.getElementById('registerFormElement');
+        if (loginFormElement) loginFormElement.reset();
+        if (registerFormElement) {
+             registerFormElement.reset();
+             // Re-run validation functions to reset messages/styles if necessary
+             validatePhone();
+             validatePassword();
+             validateConfirmPassword();
+        }
     }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Attach event listeners for new RajaLuck forms
+    const loginFormElement = document.getElementById('loginFormElement');
+    if (loginFormElement) {
+        loginFormElement.addEventListener('submit', handleLoginNew); 
+        // Clear messages when user starts typing on login form
+        loginFormElement.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', clearMessageRajaluck);
+        });
+    }
+
+    const registerFormElement = document.getElementById('registerFormElement');
+    if (registerFormElement) {
+        registerFormElement.addEventListener('submit', handleRegisterNew); 
+        // Real-time validation for register form
+        document.getElementById('registerPhoneNumber').addEventListener('input', validatePhone);
+        document.getElementById('registerPassword').addEventListener('input', validatePassword);
+        document.getElementById('confirmPassword').addEventListener('input', validateConfirmPassword);
+        // Removed 'required' attribute from invitationCode in HTML, so no specific validation for it here if empty.
+        document.getElementById('invitationCode').addEventListener('input', clearMessageRajaluck);
+        document.getElementById('agreeToTerms').addEventListener('change', clearMessageRajaluck);
+
+        // Clear messages when user starts typing on register form
+        registerFormElement.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', clearMessageRajaluck);
+        });
+    }
+
+    // Phone number formatting
+    document.querySelectorAll('.phone-number').forEach(input => {
+        input.addEventListener('input', function(e) {
+            e.target.value = formatPhoneNumber(e.target.value);
+        });
+        input.addEventListener('keypress', function(e) {
+            if (!/\d/.test(e.key) && !['Backspace', 'Delete', 'Tab', 'Enter'].includes(e.key)) {
+                e.preventDefault();
+            }
+        });
+    });
 });
 </script>
 </body>
