@@ -1767,13 +1767,13 @@ function copyLink() {
 }
 
 function shareLink() { 
-    playSound(clickSound); 
+    playSound(clickSound); // Optional click sound
 
-    // Your referral link
-    const link = document.getElementById('referLink').innerText.trim(); 
+    // Get UID dynamically (replace with your game's UID variable if needed)
+    const userUID = "12345678";
 
-    // Your game UID (get from HTML or game variable)
-    const userUID = document.getElementById('userUID').innerText.trim(); 
+    // Link with referral code parameter
+    const link = https://yourlink.com/?ref=${userUID};
 
     // Share message
     const shareText = 
@@ -1786,18 +1786,32 @@ Use my Referral Code and get ₹20 EXTRA instantly! 💸
 
 ⏳ Hurry! This offer won’t last long.`; 
 
-    // Mobile native share API
+    // Share if supported
     if (navigator.share) { 
         navigator.share({ 
             title: 'Join GURU WIN', 
-            text: shareText 
+            text: shareText, 
+            url: link
         })
+        .then(() => console.log('Share successful'))
         .catch(error => console.error('Error sharing:', error)); 
     } else { 
-        // Fallback if device doesn't support navigator.share
         showPopup("Sharing not supported on this device.", "error"); 
     } 
 }
+
+// ===== Referral Auto-Fill Code =====
+(function autoFillReferralCode() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const refCode = urlParams.get("ref");
+    if (refCode) {
+        const input = document.getElementById("referralCodeInput"); // ID of your referral input box
+        if (input) {
+            input.value = refCode;
+        }
+    }
+})();
+    
 let currentPage = 0; 
 const perPage = 5;
 
