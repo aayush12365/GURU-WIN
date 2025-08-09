@@ -1768,10 +1768,28 @@ function copyLink() {
 
 function shareLink() { 
     playSound(clickSound); 
-    const link = document.getElementById('referLink').innerText; 
+
+    // Get link and UID
+    const link = document.getElementById('referLink').innerText.trim(); 
+    const userUID = document.getElementById('userUID').innerText.trim(); // assuming you have an element with UID
+
+    // Message text with UID
+    const shareText = `🚀 Double your rewards!
+Join using my special link to get your bonus 🎁
+Use my Referral Code and get ₹20 EXTRA instantly! 💸
+
+🔑 Referral Code: ${userUID}
+🔗 Join Link: ${link}
+
+⏳ Hurry! This offer won’t last long.`; 
+
     if (navigator.share) { 
-        navigator.share({ title: 'Join GURU WIN', text: 'Earn by playing games!', url: link })
-            .catch(error => console.error('Error sharing:', error)); 
+        navigator.share({ 
+            title: 'Join GURU WIN', 
+            text: shareText, 
+            url: link // This will add a clickable link separately in share UI
+        })
+        .catch(error => console.error('Error sharing:', error)); 
     } else { 
         showPopup("Sharing not supported on this device.", "error"); 
     } 
