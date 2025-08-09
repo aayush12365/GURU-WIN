@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -63,8 +64,20 @@
         .tab-content { display: none; width: 100%; }
         .tab-content.active { display: block; }
         .bottom-nav { background: #fff; position: sticky; bottom: 0; width: 100%; display: flex; justify-content: space-around; border-top: 1px solid #e0e0e0; z-index: 20; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); flex-shrink: 0;}
-        .bottom-nav div { flex: 1; padding: 12px 0; text-align: center; color: #888; font-size: 13px; cursor: pointer; display: flex; flex-direction: column; align-items: center; transition: color 0.2s; }
-        .bottom-nav div::before { content: ''; font-size: 22px; margin-bottom: 3px; }
+        .bottom-nav div { flex: 1; padding: 6px 0; text-align: center; color: #000000; font-size: 12px; cursor: pointer; display: flex; flex-direction: column; align-items: center; transition: color 0.2s; }
+        .bottom-nav div::before { content: ''; font-size: 16px; margin-bottom: 2px; }
+        .bottom-nav {
+    position: fixed;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 0px); /* safe area + extra space */
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    border-top: 1px solid #e0e0e0;
+    z-index: 20;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    background: #fff; /* ya apna background color */
+    padding-bottom: env(safe-area-inset-bottom, 0px); /* extra padding for iOS/Android gesture bar */
+}
         .bottom-nav div:nth-child(1)::before { content: '🎲'; } .bottom-nav div:nth-child(2)::before { content: '💣'; }
         .bottom-nav div:nth-child(3)::before { content: '🎁'; } .bottom-nav div:nth-child(4)::before { content: '👤'; }
         .bottom-nav .active { color: var(--theme-red); font-weight: bold; }
@@ -385,7 +398,7 @@
       <div class="form-group"><input type="tel" id="regMobile" placeholder="Mobile Number" maxlength="10"></div>
       <div class="form-group"><input type="password" id="regPassword" placeholder="New Password"></div>
       <div class="form-group"><input type="password" id="regConfirm" placeholder="Confirm Password"></div>
-      <div class="form-group"><input type="text" id="regRefer" placeholder="Refer Code (optional)"></div>
+      <div class="form-group"><input type="text" id="regRefer" placeholder="Use ReferCode GET₹20"></div>
       <div class="error" id="registerError"></div>
       <button class="btn" onclick="handleRegister()">Sign Up</button>
     </div>
@@ -549,7 +562,7 @@
           <h2>🎁 Refer & Earn</h2>
           <div class="refer-box">
             <p>Invite friends and earn commission on their deposits!</p>
-            <p class="refer-link" id="referLink">https://aayush12365.github.io/GURU-WIN/123456</p>
+            <p class="refer-link" id="referLink">https://aayush12365.github.io/GURU-WIN/</p>
             <div class="btns">
               <button class="btn" onclick="copyLink()">Copy</button>
               <button class="btn" onclick="shareLink()">Share</button>
@@ -686,7 +699,7 @@
               <p><span>Red:</span> If the result is 2, 4, 6, or 8, you win (x1.9). If it's 0 (Red+Violet), you win (x1.5).</p>
               <p><span>Violet:</span> If the result is 0 or 5, you win (x4.5).</p>
               <p><span>Number:</span> If you bet on the correct number, you win (x9).</p>
-              <p><span>Size (Big/Small):</span> If the result is not Violet (0 or 5), you win (x2).</p>
+              <p><span>Size (Big/Small):</span> If the result is not Violet (0 or 5), you win (x1.9).</p>
           </div>
           <div class="rules-footer"><button id="rules-close-btn">Close</button></div>
       </div>
@@ -753,9 +766,9 @@
   <div class="overlay-page form-overlay" id="depositOverlayPage">
     <div class="overlay-header"><div class="overlay-back-button" onclick="closeOverlay('deposit')">←</div><h2>Deposit</h2></div>
     <div class="overlay-container deposit-container">
-      <div class="download-text">⬇️ Click QR to Download or Copy UPI</div>
-      <a id="qrDownload" href="https://ik.imagekit.io/9jxdbc3z2/IMG_20250713_232502.png?updatedAt=1752429661731" download="upi_qr.png">
-        <img src="https://ik.imagekit.co/9jxdbc3z2/IMG_20250713_232502.png?updatedAt=1752429661731" alt="QR" class="qr-img"/>
+      <div class="download-text">Click QR to Download or Copy UPI</div>
+      <a id="qrDownload" href="https://ik.imagekit.io/9jxdbc3z2/IMG_20250809_155924.png?updatedAt=1754735393465" download="upi_qr.png">
+        <img src="https://ik.imagekit.io/9jxdbc3z2/IMG_20250809_155924.png?updatedAt=1754735393465" alt="QR" class="qr-img"/>
       </a>
       <div class="upi">9516103483@cnrb</div><div class="name">AYUSH RAJPUT</div>
       <button class="copy-btn" onclick="copyUPI()">Copy UPI ID</button><br>
@@ -1982,11 +1995,11 @@ function processLotteryBets(duration, periodId, gameResult) {
 
         if (bet.type === 'color') {
             if (bet.value === 'Green' && (gameResult.number === 1 || gameResult.number === 3 || gameResult.number === 7 || gameResult.number === 9)) {
-                win = true; payoutMultiplier = 2;
+                win = true; payoutMultiplier = 1.9;
             } else if (bet.value === 'Green' && gameResult.number === 5) { 
                 win = true; payoutMultiplier = 1.5;
             } else if (bet.value === 'Red' && (gameResult.number === 2 || gameResult.number === 4 || gameResult.number === 6 || gameResult.number === 8)) {
-                win = true; payoutMultiplier = 2;
+                win = true; payoutMultiplier = 1.9;
             } else if (bet.value === 'Red' && gameResult.number === 0) { 
                 win = true; payoutMultiplier = 1.5;
             } else if (bet.value === 'Violet' && (gameResult.number === 0 || gameResult.number === 5)) {
@@ -1999,9 +2012,9 @@ function processLotteryBets(duration, periodId, gameResult) {
         } else if (bet.type === 'size') {
             if ((gameResult.number !== 0 && gameResult.number !== 5)) {
                 if (bet.value === 'Big' && gameResult.size === 'Big') {
-                    win = true; payoutMultiplier = 2;
+                    win = true; payoutMultiplier = 1.9;
                 } else if (bet.value === 'Small' && gameResult.size === 'Small') {
-                    win = true; payoutMultiplier = 2;
+                    win = true; payoutMultiplier = 1.9;
                 }
             }
         }
