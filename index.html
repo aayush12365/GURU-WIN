@@ -1779,19 +1779,6 @@ Use my Referral Code and get ₹20 EXTRA instantly! 💸
         showPopup("Sharing not supported on this device.", "error"); 
     } 
 }
-
-// ===== Referral Auto-Fill Code =====
-(function autoFillReferralCode() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const refCode = urlParams.get("ref");
-    if (refCode) {
-        const input = document.getElementById("referralCodeInput"); // ID of your referral input box
-        if (input) {
-            input.value = refCode;
-        }
-    }
-})();
-    
 let currentPage = 0; 
 const perPage = 5;
 
