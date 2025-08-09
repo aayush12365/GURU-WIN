@@ -802,6 +802,8 @@
                         <div class="phone-input">
                             <select class="country-code" id="loginCountryCode">
                                 <option value="+91">+91</option>
+                                <!-- Other country codes can be added here -->
+                            </select>
                             <input 
                                 type="tel" 
                                 class="phone-number" 
@@ -859,17 +861,19 @@
             </div>
             
             <!-- Register Form -->
-            <div class="form-section" id="registerFormGURUWIN">
+            <div class="form-section" id="registerFormRajaluck">
                 <form id="registerFormElement">
                     <!-- Phone number input -->
-                    <div class="form-group-GURUWIN">
+                    <div class="form-group-rajaluck">
                         <div class="form-label">
                             <div class="form-icon">📱</div>
                             <span>log in via phone number</span>
                         </div>
                         <div class="phone-input">
                             <select class="country-code" id="registerCountryCode">
-      
+                                <option value="+91">+91</option>
+                                <!-- Other country codes can be added here -->
+                            </select>
                             <input 
                                 type="tel" 
                                 class="phone-number" 
@@ -892,7 +896,7 @@
                         <div class="password-container">
                             <input 
                                 type="password" 
-                                class="form-input-GURUWIN" 
+                                class="form-input-rajaluck" 
                                 id="registerPassword"
                                 placeholder="please enter a password"
                                 required
@@ -906,7 +910,7 @@
                     </div>
                     
                     <!-- Confirm password input -->
-                    <div class="form-group-GURUWIN">
+                    <div class="form-group-rajaluck">
                         <div class="form-label">
                             <div class="form-icon">🔒</div>
                             <span>Confirm password</span>
@@ -914,7 +918,7 @@
                         <div class="password-container">
                             <input 
                                 type="password" 
-                                class="form-input-GURUWIN" 
+                                class="form-input-rajaluck" 
                                 id="confirmPassword"
                                 placeholder="please enter Confirm password"
                                 required
@@ -1475,9 +1479,11 @@ function validatePhone() {
     
     if (phoneNumber && !isValidPhoneNumber(phoneNumber)) {
         validation.style.display = 'block';
+        validation.textContent = 'The registered phone number cannot start with 0! Example: 956521888';
         validation.style.color = '#ff4757';
     } else {
         validation.style.display = 'none';
+        validation.textContent = ''; // Clear message if valid
     }
 }
 
@@ -1810,6 +1816,7 @@ function submitWithdrawal() {
         amount: amount.toFixed(2),
         name: withdrawName,
         mobile: withdrawMobile,
+    
         upi: withdrawUpi,
         date: new Date().toISOString(),
         status: "Pending"
@@ -2653,7 +2660,7 @@ async function handleLoginNew(e) {
         return;
     }
     
-    if (phoneNumber.length !== 10 || isNaN(phoneNumber)) {
+    if (phoneNumber.length !== 10 || isNaN(phoneNumber) || !isValidPhoneNumber(phoneNumber)) { // Added isValidPhoneNumber check here
         showMessageRajaluck('Please enter a valid 10-digit mobile number.', 'error');
         return;
     }
